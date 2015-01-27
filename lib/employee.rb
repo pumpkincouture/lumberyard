@@ -1,16 +1,21 @@
+require 'data_mapper'
 class Employee
-  def initialize(attributes)
-    @attributes = attributes
-  end
+  include DataMapper::Resource
+  property :id, Serial
+  property :first_name, String
+  property :last_name, String
+  property :username, String
+  property :employee_type, String
 
-  def valid?
-    valid_employee_type? && valid_employee_fields?
-  end
+  validates_with_method :first_name, :method => :valid_name_attributes?
+  validates_with_method :last_name, :method => :valid_name_attributes?
+  validates_with_method :username, :method => :valid_username?
+  validates_with_method :employee_type, :method => :valid_employee_type?
 
   private
 
   def valid_employee_type?
-    ['admin', 'non-admin'].include?(@attributes[:employee_type])
+    ['admin', 'non-admin'].include?(@employee_type)
   end
 
   def valid_employee_fields?
@@ -18,11 +23,11 @@ class Employee
   end
 
   def valid_name_attributes?
-    !@attributes[:last_name].nil? && !@attributes[:last_name].empty? &&
-     !@attributes[:first_name].nil? && !@attributes[:first_name].empty?
+    !@last_name.nil? && !@last_name.empty?
+     !@first_name.nil? && !@first_name.empty?
   end
 
   def valid_username?
-    !@attributes[:username].nil? && !@attributes[:username].empty?
+    !@username.nil? && !@username.empty?
   end
 end

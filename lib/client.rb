@@ -1,13 +1,24 @@
 class Client
-  def initialize(attributes)
-    @attributes = attributes
-  end
+  require 'data_mapper'
 
-  def valid?
-    present?(:name) && present?(:type)
-  end
+  include DataMapper::Resource
+
+  property :id, Serial
+  property :name, String
+  property :type, String
+
+  validates_with_method :name, :method => :valid_name?
+  validates_with_method :type, :method => :valid_type?
 
   private
+
+  def valid_name?
+    !@name.nil? && !@name.empty?
+  end
+
+  def valid_type?
+    !@type.nil? && !@type.empty?
+  end
 
   def present?(field)
     !@attributes[field].nil? && !@attributes[field].empty?

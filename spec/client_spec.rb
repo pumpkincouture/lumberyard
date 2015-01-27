@@ -1,34 +1,34 @@
 require 'rspec'
 require 'client'
+require 'spec_helper'
 
 describe Client do
- def new_client(attributes = {})
-    Client.new(
-      {name: "Sodexo",
-        type: "Standard"
-      }.merge(attributes)
-    )
-  end
-
   context "client attributes" do
     it "requires name and type" do
-      client = new_client
+      client = Client.create(:name => "Praxair", :type => "Standard")
       expect(client.valid?).to be(true)
     end
 
     it "empty name is invalid" do
-      client = new_client({name:"", type:"Standard"})
+      client = Client.create(:name => "", :type => "Standard")
       expect(client.valid?).to be(false)
     end
 
     it "nil name is invalid" do
-      client = new_client({name:nil, type:"Standard"})
+      client = Client.create(:name => nil, :type => "Standard")
       expect(client.valid?).to be(false)
     end
 
     it "nil type is invalid" do
-      client = new_client({type:""})
+      client = Client.create(:name => "Praxair", :type => nil)
       expect(client.valid?).to be(false)
+    end
+  end
+
+  context "writing to a database" do
+    it "creates a new client in the database" do
+      client = Client.create(:name => "Praxair", :type => "Standard")
+      expect(Client.first.name).to eq("Praxair")
     end
   end
 end
