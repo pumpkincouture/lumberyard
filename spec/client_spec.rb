@@ -30,5 +30,9 @@ describe Client do
       client = Client.create(:name => "Praxair", :type => "Standard")
       expect(Client.first.name).to eq("Praxair")
     end
+
+    it "created two of the same objects in the database" do
+      expect(Client.count).to eq(2)
+    end
   end
 end

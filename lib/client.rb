@@ -19,8 +19,4 @@ class Client
   def valid_type?
     !@type.nil? && !@type.empty?
   end
-
-  def present?(field)
-    !@attributes[field].nil? && !@attributes[field].empty?
-  end
 end
