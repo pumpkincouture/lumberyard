@@ -1,6 +1,7 @@
 require 'data_mapper'
 class Employee
   include DataMapper::Resource
+
   property :id, Serial
   property :first_name, String
   property :last_name, String

@@ -2,15 +2,6 @@ require 'rspec'
 require 'timesheet'
 require 'spec_helper'
 
-def new_timesheet(attributes = {})
-    TimeSheet.new({
-      username:"solak",
-      date: "2015/1/23",
-      hours:"6",
-      project_type: "Billable"}.merge(attributes)
-    )
-  end
-
 describe TimeSheet do
 
   context "timesheet attributes" do
