@@ -21,10 +21,10 @@ describe LumberLogger do
 
     it "writes valid client to database" do
       @lumberlogger.create_client({
-        name: "CleanLiving",
+        name: "Cleanliving",
         type: "Standard"
         })
-      expect(Client.last.name).to eq("CleanLiving")
+      expect(Client.last.name).to eq("Cleanliving")
     end
 
     it "writes valid timesheet to database" do
@@ -67,22 +67,16 @@ describe LumberLogger do
   end
 
   context "finding records from database" do
-    it "returns false if the user record does not exist" do
-      expect(@lumberlogger.employee_exists?('radams')).to eq(false)
+    it "returns the first existing employee with a particular username" do
+      expect(@lumberlogger.find_employee('dlockhart').employee_type).to eq('admin')
     end
 
-    it "returns true if the user record exists" do
-      expect(@lumberlogger.employee_exists?('Dsmith')).to eq(true)
+    it "returns false if the employee record is not found" do
+      expect(@lumberlogger.find_employee('radams')).to eq(false)
     end
 
-    it "returns false if the client does not exist" do
-      expect(@lumberlogger.client_exists?('aflac')).to eq(false)
+    it "returns the first existing client with a particular name" do
+      expect(@lumberlogger.find_client("Cleanliving").type).to eq("Standard")
     end
-
-    it "returns true if the client exists" do
-      expect(@lumberlogger.client_exists?('Praxair')).to eq(true)
-    end
-
-    it
   end
 end

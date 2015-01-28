@@ -96,7 +96,7 @@ describe TimeSheet do
         :username => "solak",
         :date => "2015/1/13",
         :hours => "6",
-        :project_type => "billable",
+        :project_type => "Billable",
         :client => ""
         )
       expect(timesheet.valid?).to eq(false)

@@ -25,6 +25,24 @@ class LumberLogger
       )
   end
 
+  def find_client(client)
+    client_exists?(client) ? get_client_record(client) : false
+  end
+
+   def find_employee(employee)
+    employee_exists?(employee) ? get_employee_record(employee) : false
+  end
+
+  private
+
+  def get_employee_record(employee)
+    Employee.first(:username => employee.downcase)
+  end
+
+  def get_client_record(client)
+    Client.first(:name => client.capitalize)
+  end
+
   def employee_exists?(employee)
     !Employee.all(:username => employee.downcase).empty? ? true : false
   end
