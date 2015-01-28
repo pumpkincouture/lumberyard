@@ -24,15 +24,4 @@ describe Client do
       expect(client.valid?).to be(false)
     end
   end
-
-  context "writing to a database" do
-    it "creates a new client in the database" do
-      client = Client.create(:name => "Praxair", :type => "Standard")
-      expect(Client.first.name).to eq("Praxair")
-    end
-
-    it "created two of the same objects in the database" do
-      expect(Client.count).to eq(2)
-    end
-  end
 end

@@ -2,6 +2,7 @@ require 'data_mapper'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
+require './lib/lumberlogger.rb'
 
 DataMapper.setup(:default, "sqlite::memory:")
 DataMapper.finalize

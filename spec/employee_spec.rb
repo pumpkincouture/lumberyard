@@ -37,15 +37,4 @@ describe Employee do
       expect(employee.valid?).to eq(false)
     end
   end
-
-  context "writing to a database" do
-    it "creates a new user" do
-      employee = Employee.create(:first_name => "Will", :last_name => "Gardner", :username => "wgardner", :employee_type => "admin")
-      expect(Employee.last.first_name).to eq("Will")
-    end
-
-    it "creates only valid users" do
-      expect(Employee.count).to eq(4)
-    end
-  end
 end

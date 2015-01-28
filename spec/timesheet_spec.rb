@@ -10,7 +10,8 @@ describe TimeSheet do
         :username => "ddavid",
         :date => "2015/1/11",
         :hours => "2",
-        :project_type => "billable")
+        :project_type => "non-billable",
+        )
       expect(timesheet.valid?).to eq(true)
     end
 
@@ -79,6 +80,49 @@ describe TimeSheet do
       expect(timesheet.valid?).to eq(false)
     end
 
+    it "billable type can only have valid client" do
+        timesheet = TimeSheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "billable",
+        :client => "United"
+        )
+      expect(timesheet.valid?).to eq(true)
+    end
+
+    it "billable type with empty client is not valid" do
+        timesheet = TimeSheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "billable",
+        :client => ""
+        )
+      expect(timesheet.valid?).to eq(false)
+    end
+
+    it "billable type with nil client is not valid" do
+        timesheet = TimeSheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "billable",
+        :client => nil
+        )
+      expect(timesheet.valid?).to eq(false)
+    end
+
+    it "if billable type with no client, is invalid" do
+        timesheet = TimeSheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "billable"
+        )
+         expect(timesheet.valid?).to eq(false)
+     end
+
     it "missing a project type is not valid" do
         timesheet = TimeSheet.create(
         :username => "solak",
@@ -106,21 +150,6 @@ describe TimeSheet do
         :hours => "6",
         :project_type => "billable")
       expect(timesheet.valid?).to eq(false)
-    end
-  end
-
-  context "writing to a database" do
-    it "creates a new timesheet in the database" do
-      timesheet = TimeSheet.create(
-        :username => "solak",
-        :date => "2015/1/13",
-        :hours => "6",
-        :project_type => "billable")
-      expect(TimeSheet.last.username).to eq("solak")
-    end
-
-    it "created two valid entries in database" do
-      expect(TimeSheet.count).to eq(2)
     end
   end
 end
