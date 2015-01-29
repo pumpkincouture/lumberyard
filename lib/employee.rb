@@ -11,7 +11,7 @@ class Employee
   validates_with_method :first_name, :method => :valid_name_attributes?
   validates_with_method :last_name, :method => :valid_name_attributes?
   validates_with_method :username, :method => :valid_username?
-  validates_with_method :employee_type, :method => :valid_employee_type?
+  validates_with_method :employee_type, :method => :valid_employee_type?, :message => "no employee_type."
 
   private
 

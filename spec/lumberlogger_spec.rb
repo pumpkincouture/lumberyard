@@ -67,7 +67,7 @@ describe LumberLogger do
   end
 
   context "finding records from database" do
-    it "returns the first existing employee with a particular username" do
+    it "returns the first existing employee object with a particular username" do
       expect(@lumberlogger.find_employee('dlockhart').employee_type).to eq('admin')
     end
 
@@ -75,8 +75,24 @@ describe LumberLogger do
       expect(@lumberlogger.find_employee('radams')).to eq(false)
     end
 
-    it "returns the first existing client with a particular name" do
+    it "returns the first existing client object with a particular name" do
       expect(@lumberlogger.find_client("Cleanliving").type).to eq("Standard")
+    end
+
+    it "returns true if the employee is found" do
+      expect(@lumberlogger.employee_exists?('dlockhart')).to eq(true)
+    end
+
+    it "returns false if employee is not found" do
+      expect(@lumberlogger.employee_exists?('radams')).to eq(false)
+    end
+
+    it "returns true if client is found" do
+      expect(@lumberlogger.client_exists?('Cleanliving')).to eq(true)
+    end
+
+    it "returns false if client is not found" do
+      expect(@lumberlogger.client_exists?('Chipotle')).to eq(false)
     end
   end
 end

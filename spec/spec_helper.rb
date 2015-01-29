@@ -1,8 +1,16 @@
 require 'data_mapper'
+require 'rack/test'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
 require './lib/lumberlogger.rb'
+
+require File.expand_path '../../lumberyard.rb', __FILE__
+ENV['RACK_ENV'] = 'test'
+
+RSpec.configure do |conf|
+  conf.include Rack::Test::Methods
+end
 
 DataMapper.setup(:default, "sqlite::memory:")
 DataMapper.finalize

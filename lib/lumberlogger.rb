@@ -1,3 +1,5 @@
+require 'data_mapper'
+
 class LumberLogger
 
   def create_employee(attributes)
@@ -26,11 +28,19 @@ class LumberLogger
   end
 
   def find_client(client)
-    client_exists?(client) ? get_client_record(client) : false
+    client_in_database?(client) ? get_client_record(client) : false
   end
 
-   def find_employee(employee)
-    employee_exists?(employee) ? get_employee_record(employee) : false
+  def find_employee(employee)
+    employee_in_database?(employee) ? get_employee_record(employee) : false
+  end
+
+  def employee_exists?(employee)
+    employee_in_database?(employee)
+  end
+
+  def client_exists?(client)
+    client_in_database?(client)
   end
 
   private
@@ -43,11 +53,11 @@ class LumberLogger
     Client.first(:name => client.capitalize)
   end
 
-  def employee_exists?(employee)
+  def employee_in_database?(employee)
     !Employee.all(:username => employee.downcase).empty? ? true : false
   end
 
-  def client_exists?(client)
+  def client_in_database?(client)
     !Client.all(:name => client.capitalize).empty? ? true : false
   end
 end
