@@ -43,6 +43,10 @@ class LumberLogger
     client_in_database?(client)
   end
 
+  def print_hello
+    p "hello"
+  end
+
   private
 
   def get_employee_record(employee)

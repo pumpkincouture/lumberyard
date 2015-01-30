@@ -1,22 +1,23 @@
 require 'data_mapper'
 require 'rack/test'
+require 'rspec-html-matchers'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
 require './lib/lumberlogger.rb'
-
-require File.expand_path '../../lumberyard.rb', __FILE__
-ENV['RACK_ENV'] = 'test'
-
-RSpec.configure do |conf|
-  conf.include Rack::Test::Methods
-end
+require './lumberyard.rb'
 
 DataMapper.setup(:default, "sqlite::memory:")
 DataMapper.finalize
 Employee.auto_upgrade!
 Client.auto_upgrade!
 TimeSheet.auto_upgrade!
+
+ENV['RACK_ENV'] = 'test'
+
+def app
+  Sinatra::Application
+end
 
 RSpec.configure do |config|
   config.failure_color = :red
@@ -25,4 +26,5 @@ RSpec.configure do |config|
   config.tty = true
   config.color = true
   config.formatter = :documentation
+  config.include Rack::Test::Methods
 end
