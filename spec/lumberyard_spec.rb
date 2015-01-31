@@ -19,10 +19,19 @@ describe 'LumberYard App' do
       post '/username', {"username_name" => 'radams'}
       expect(last_response.body).to include("That username is invalid. Please input your username.")
     end
+  end
 
-    it "leads to success page if user is found" do
-      post '/username', {"username_name" => "dlockhart"}
-      expect(last_response.body).to include("You're logged in!")
+  context "main options page for employee" do
+    it "display admin page if employee is type admin" do
+      post '/username', {"username_name" => 'dlockhart'}
+      expect(last_response.body).to include("Welcome, Diane")
+      expect(last_response.body).to include("Add client")
+    end
+
+    it "displays non admin page if employee is not admin" do
+      post '/username', {"username_name" => 'echeesecake'}
+      expect(last_response.body).to_not include("Add client")
+      expect(last_response.body).to include("Welcome, Eli")
     end
   end
 end
