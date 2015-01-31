@@ -28,11 +28,11 @@ class LumberLogger
   end
 
   def find_client(client)
-    client_in_database?(client) ? get_client_record(client) : false
+    get_client_record(client)
   end
 
   def find_employee(employee)
-    employee_in_database?(employee) ? get_employee_record(employee) : false
+    get_employee_record(employee)
   end
 
   def employee_exists?(employee)
@@ -41,10 +41,6 @@ class LumberLogger
 
   def client_exists?(client)
     client_in_database?(client)
-  end
-
-  def print_hello
-    p "hello"
   end
 
   private
