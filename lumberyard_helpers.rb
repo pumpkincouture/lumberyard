@@ -16,10 +16,6 @@ module LumberYardHelpers
     include_logger.find_employee(params).employee_type == NONADMIN
   end
 
-  def get_employee(params)
-    employee
-  end
-
   def employee_exists?(params)
     include_logger.employee_exists?(params)
   end
