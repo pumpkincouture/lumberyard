@@ -40,4 +40,16 @@ describe LumberYardHelpers do
       expect(get_correct_form("3")).to eq(:add_employee)
     end
   end
+
+  describe '#get_all_clients' do
+    it "returns all clients in dtabase" do
+      expect(get_all_clients.first.name).to eq("Praxair")
+    end
+  end
+
+  describe '#get_timesheet' do
+    it "returns this month's timesheet for logged in employee" do
+      expect(get_timesheet.empty?).to eq(true)
+    end
+  end
 end

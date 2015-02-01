@@ -1,4 +1,6 @@
 require 'data_mapper'
+require 'date'
+require 'timesheet'
 
 class LumberLogger
 
@@ -23,7 +25,8 @@ class LumberLogger
       :username => attributes.fetch(:username),
       :date => attributes.fetch(:date),
       :hours => attributes.fetch(:hours),
-      :project_type => attributes.fetch(:project_type)
+      :project_type => attributes.fetch(:project_type),
+      :client => attributes.fetch(:client)
       )
   end
 
@@ -43,6 +46,14 @@ class LumberLogger
     client_in_database?(client)
   end
 
+  def get_all_clients
+    Client.all
+  end
+
+  def get_timesheet
+     TimeSheet.all(:date => get_this_month)
+  end
+
   private
 
   def get_employee_record(employee)
@@ -59,5 +70,9 @@ class LumberLogger
 
   def client_in_database?(client)
     !Client.all(:name => client.capitalize).empty? ? true : false
+  end
+
+  def get_this_month
+    Date.today.month.to_s
   end
 end

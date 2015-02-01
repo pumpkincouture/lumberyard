@@ -32,7 +32,8 @@ describe LumberLogger do
         username: "egold",
         date: "2015/1/3",
         hours: "5",
-        project_type: "non-billable"
+        project_type: "non-billable",
+        client: ""
         })
       expect(TimeSheet.last.project_type).to eq("non-billable")
     end
@@ -42,7 +43,8 @@ describe LumberLogger do
         first_name: "Eli",
         last_name: "Cheesecake",
         username: nil,
-        employee_type: "non-admin"
+        employee_type: "non-admin",
+        client: ""
         })
       expect(Employee.last.username).to_not eq(nil)
     end
@@ -60,7 +62,8 @@ describe LumberLogger do
         username: "egold",
         date: "2015//3",
         hours: "5",
-        project_type: "non-billable"
+        project_type: "non-billable",
+        client: ""
         })
       expect(TimeSheet.last.date).to_not eq("2015//3")
     end
@@ -89,6 +92,14 @@ describe LumberLogger do
 
     it "returns false if client is not found" do
       expect(@lumberlogger.client_exists?('Chipotle')).to eq(false)
+    end
+
+    it "finds all clients in the database" do
+      expect(@lumberlogger.get_all_clients.first.name).to eq("Praxair")
+    end
+
+    it "returns timesheet for specific employee" do
+      expect(@lumberlogger.get_timesheet.empty?).to eq(true)
     end
   end
 end

@@ -1,1 +1,11 @@
-<p>You requested time!</p>
+<article class="welcome" >
+  <% if @time_sheet.empty? %>
+  <p>No time to display for this month.</p>
+   <% end %>
+    <% @time_sheet.each do |timesheet| %>
+      <p>Username: <%= timesheet.username %></p>
+      <p>Project date: <%= timesheet.year %>-<%= timesheet.month %>-<%= timesheet.day %> </p>
+      <p>Hours: <%= timesheet.hours %> hours</p>
+      <p>Project: <%= timesheet.project_type %></p>
+  <% end %>
+</article>
