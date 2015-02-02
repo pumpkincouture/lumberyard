@@ -1,6 +1,11 @@
 require 'data_mapper'
+require 'lumberyard_constants'
+
 class Employee
   include DataMapper::Resource
+  include LumberYardConstants
+
+  attr_reader :first_name, :last_name, :username, :employee_type
 
   property :id, Serial
   property :first_name, String
@@ -11,12 +16,12 @@ class Employee
   validates_with_method :first_name, :method => :valid_name_attributes?
   validates_with_method :last_name, :method => :valid_name_attributes?
   validates_with_method :username, :method => :valid_username?
-  validates_with_method :employee_type, :method => :valid_employee_type?, :message => "no employee_type."
+  validates_with_method :employee_type, :method => :valid_employee_type?
 
   private
 
   def valid_employee_type?
-    ['admin', 'non-admin'].include?(@employee_type)
+    EMPLOYEE_TYPES.include?(employee_type)
   end
 
   def valid_employee_fields?
@@ -24,11 +29,11 @@ class Employee
   end
 
   def valid_name_attributes?
-    !@last_name.nil? && !@last_name.empty?
-     !@first_name.nil? && !@first_name.empty?
+    !last_name.nil? && !last_name.empty?
+     !first_name.nil? && !first_name.empty?
   end
 
   def valid_username?
-    !@username.nil? && !@username.empty?
+    !username.nil? && !username.empty?
   end
 end

@@ -3,6 +3,8 @@ class Client
 
   include DataMapper::Resource
 
+  attr_reader :name, :type
+
   property :id, Serial
   property :name, String
   property :type, String
@@ -13,10 +15,10 @@ class Client
   private
 
   def valid_name?
-    !@name.nil? && !@name.empty?
+    !name.nil? && !name.empty?
   end
 
   def valid_type?
-    !@type.nil? && !@type.empty?
+    !type.nil? && !type.empty?
   end
 end

@@ -11,6 +11,7 @@ describe TimeSheet do
         :date => "2015/1/11",
         :hours => "2",
         :project_type => "non-billable",
+        :client => ""
         )
       expect(timesheet.valid?).to eq(true)
     end
