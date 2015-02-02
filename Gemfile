@@ -3,10 +3,14 @@ source 'https://rubygems.org'
 gem 'datamapper'
 gem 'sinatra'
 
-group :test, :development do
-  gem 'rspec', '3.1.0'
+group :production do
+    gem "dm-postgres-adapter"
+    gem "pg"
 end
 
-group :test do
-  gem 'rack-test'
+group :development, :test do
+    gem 'sqlite3', '~> 1.3.10'
+    gem "dm-sqlite-adapter"
+    gem 'rack-test'
+    gem 'rspec', '3.1.0'
 end
