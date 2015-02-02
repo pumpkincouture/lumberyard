@@ -1,6 +1,6 @@
 require 'date'
 require 'data_mapper'
-require 'lumberyard_constants'
+require_relative 'lumberyard_constants.rb'
 
 class TimeSheet
   include DataMapper::Resource

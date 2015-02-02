@@ -1,6 +1,6 @@
 require 'data_mapper'
 require 'date'
-require 'timesheet'
+require_relative 'timesheet.rb'
 
 class LumberLogger
 

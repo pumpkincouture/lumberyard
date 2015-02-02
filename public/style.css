@@ -1,0 +1,88 @@
+body {
+    margin: 35px auto;
+    width: 640px;
+    background-color: ivory;
+    padding-bottom: 70px;
+}
+
+header {
+    text-align: center;
+    margin: 10px 0 20px;
+}
+
+header h1 {
+    display: inline;
+    color: midnightblue;
+    font-size: 50px;
+    font-family: helvetica;
+}
+
+header h1 a:link, header h1 a:visited {
+    color: midnightblue;
+    text-decoration: none;
+}
+
+.username_prompt {
+    font-size: 15px;
+    margin-left: 130px;
+    color: slategray;
+    padding-bottom: 15px;
+}
+
+#main {
+    margin: 30px 0 20px;
+}
+
+#add {
+  margin-top:;
+}
+
+#add textarea {
+    height: 10px;
+    width: 30px;
+    /*padding: 10px;*/
+    border: 1px solid #ddd;
+}
+
+#add input[type=textbox] {
+    height: 25px;
+    width: 150px;
+    margin-top: 20px;
+    margin-left: 230px;
+    border: 1px solid dimgray;
+    background: white;
+}
+
+#add input[type=radio] {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: white;
+}
+
+
+#add input[type=submit] {
+    height: 35px;
+    width: 85px;
+    display: inline-block;
+    border: 1px solid #ddd;
+    background: deepskyblue;
+    border-radius: 20px;
+    margin-left: 260px;
+    margin-top: 20px;
+}
+
+.clients option {
+    background:green;
+    font-style: italic;
+    color:white;
+}
+
+.welcome p {
+    font-family: garamond;
+    font-size: 18px;
+    color: darkslategrey;
+}
+
+article span {
+    font-size: 0.8em;
+}

@@ -1,7 +1,19 @@
 require 'sinatra'
 require_relative 'lumberyard_helpers.rb'
+require_relative 'lib/client.rb'
+require_relative 'lib/employee.rb'
+require_relative 'lib/timesheet.rb'
 
 include LumberYardHelpers
+
+DataMapper.setup(:default, ENV["DATABASE_URL"] || "sqlite3://#{Dir.pwd}/time_logger.db")
+
+Client.new
+Employee.new
+TimeSheet.new
+
+DataMapper.finalize
+DataMapper.auto_upgrade!
 
 get '/' do
   @title = "LumberYard"
@@ -31,6 +43,11 @@ post '/selection' do
   erb get_correct_form(choice)
 end
 
+get '/billing' do
+  @clients = get_all_clients
+  erb :log_time
+end
+
 post '/billing' do
   @clients = get_all_clients
   until valid_timesheet?({
@@ -45,6 +62,11 @@ post '/billing' do
   erb :billing_success
 end
 
+get '/add_employee' do
+  @clients = get_all_clients
+  erb :add_employee
+end
+
 post '/add_employee' do
   @clients = get_all_clients
   until valid_employee?({
@@ -56,6 +78,10 @@ post '/add_employee' do
     redirect '/add_employee'
   end
   erb :add_employee_success
+end
+
+get '/add_client' do
+  erb :add_client
 end
 
 post '/add_client' do
