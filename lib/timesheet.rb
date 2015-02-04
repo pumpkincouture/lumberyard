@@ -1,7 +1,7 @@
 require 'date'
 require 'data_mapper'
 
-class TimeSheet
+class Timesheet
   include DataMapper::Resource
 
   attr_reader :username, :date, :hours, :project_type, :client
@@ -19,6 +19,20 @@ class TimeSheet
   validates_with_method :project_type, :all_fields_present?
   validates_with_method :project_type, :project_type_valid?
   validates_with_method :client, :client_valid?
+
+  def create_timesheet(attributes)
+    Timesheet.create(
+      :username => attributes.fetch(:username),
+      :date => attributes.fetch(:date),
+      :hours => attributes.fetch(:hours),
+      :project_type => attributes.fetch(:project_type),
+      :client => attributes.fetch(:client)
+      )
+  end
+
+  def get_timesheet
+     Timesheet.all(:date => get_this_month)
+  end
 
   private
 
@@ -72,5 +86,9 @@ class TimeSheet
 
   def past_date?
     Date.parse(date) < Date.today
+  end
+
+   def get_this_month
+    Date.today.month.to_s
   end
 end

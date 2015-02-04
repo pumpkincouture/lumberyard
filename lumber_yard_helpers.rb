@@ -1,12 +1,8 @@
-require_relative 'lib/lumberlogger.rb'
 require_relative 'lib/client.rb'
 require_relative 'lib/employee.rb'
+require_relative 'lib/timesheet.rb'
 
 module LumberYardHelpers
-
-  def include_logger
-    LumberLogger.new
-  end
 
   def client_instance
     Client.new
@@ -14,6 +10,10 @@ module LumberYardHelpers
 
   def employee_instance
     Employee.new
+  end
+
+  def timesheet_instance
+    Timesheet.new
   end
 
   def admin?(params)
@@ -42,7 +42,7 @@ module LumberYardHelpers
   end
 
   def get_timesheet
-    include_logger.get_timesheet
+    timesheet_instance.get_timesheet
   end
 
   def valid_employee?(attributes)
@@ -54,6 +54,6 @@ module LumberYardHelpers
   end
 
   def valid_timesheet?(attributes)
-    include_logger.create_timesheet(attributes).valid?
+    timesheet_instance.create_timesheet(attributes).valid?
   end
 end

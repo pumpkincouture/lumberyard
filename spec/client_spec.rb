@@ -46,10 +46,11 @@ describe Client do
     end
   end
 
-  context "finding clients from the database" do
+  context "finding clients in the database" do
     it "finds all clients located in the database" do
       @client = Client.new
       expect(@client.get_all_clients.first.name).to eq("Praxair")
+      expect(@client.get_all_clients.count).to eq(2)
     end
   end
 end

@@ -3,7 +3,6 @@ require 'rack/test'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
-require './lib/lumberlogger.rb'
 require './lumber_yard_helpers.rb'
 require './lumber_yard.rb'
 
@@ -11,7 +10,7 @@ DataMapper.setup(:default, "sqlite::memory:")
 DataMapper.finalize
 Employee.auto_upgrade!
 Client.auto_upgrade!
-TimeSheet.auto_upgrade!
+Timesheet.auto_upgrade!
 
 ENV['RACK_ENV'] = 'test'
 

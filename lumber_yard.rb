@@ -10,7 +10,7 @@ DataMapper.setup(:default, ENV["DATABASE_URL"] || "sqlite3://#{Dir.pwd}/time_log
 
 Client.new
 Employee.new
-TimeSheet.new
+Timesheet.new
 
 DataMapper.finalize
 DataMapper.auto_upgrade!
