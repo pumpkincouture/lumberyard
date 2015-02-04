@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe Client do
 
+  before :each do
+    Client.destroy
+  end
+
   context "client attributes" do
     it "requires name and type" do
       client = Client.create(:name => "Praxair", :type => "Standard")
@@ -49,8 +53,10 @@ describe Client do
   context "finding clients in the database" do
     it "finds all clients located in the database" do
       @client = Client.new
+      Client.create(:name => "Praxair", :type => "Standard")
+
       expect(@client.get_all_clients.first.name).to eq("Praxair")
-      expect(@client.get_all_clients.count).to eq(2)
+      expect(@client.get_all_clients.count).to eq(1)
     end
   end
 end

@@ -4,6 +4,11 @@ require 'rack/test'
 describe 'LumberYard App' do
   include Rack::Test::Methods
 
+  def get_correct_form(choice)
+    forms = ["log_time", "time_report", "add_employee", "add_client", "employee_report"]
+    forms[choice.to_i - 1].to_sym
+  end
+
   context "main page of app" do
     it "displays the title of the app" do
       get '/'
@@ -36,43 +41,41 @@ describe 'LumberYard App' do
     end
   end
 
-  context "admin employee chooses an action" do
+  context "rendering page templates based on user choice" do
     it "allows the employee to log time" do
-      post '/selection', {"option" => "1"}
+      option = "1"
+      post '/selection', option
       expect(last_request.path).to eq('/selection')
       expect(last_response.status).to eq(200)
+      expect(get_correct_form(option)).to eq(:log_time)
     end
 
     it "allows the employee to request time report" do
-      post '/selection', {"option" => "2"}
+      option = "2"
+      post '/selection', option
       expect(last_response.status).to eq(200)
+      expect(get_correct_form(option)).to eq(:time_report)
     end
 
     it "allows the employee to add an employee" do
-      post '/selection', {"option" => "3"}
+      option = "3"
+      post '/selection', option
       expect(last_response.status).to eq(200)
+      expect(get_correct_form(option)).to eq(:add_employee)
     end
 
     it "allows the employee to add a client" do
-      post '/selection', {"option" => "4"}
+      option = "4"
+      post '/selection', option
       expect(last_response.status).to eq(200)
+      expect(get_correct_form(option)).to eq(:add_client)
     end
 
     it "allows the employee to request employee report" do
-      post '/selection', {"option" => "5"}
+      option = "5"
+      post '/selection', option
       expect(last_response.status).to eq(200)
-    end
-  end
-
-  context "non-admin employee chooses an action" do
-    it "allows the employee to log time" do
-      post '/selection', {"option" => "1"}
-      expect(last_response.status).to eq(200)
-    end
-
-    it "allows the employee to request time report" do
-      post '/selection', {"option" => "2"}
-      expect(last_response.status).to eq(200)
+      expect(get_correct_form(option)).to eq(:employee_report)
     end
   end
 

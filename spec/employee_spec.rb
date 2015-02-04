@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe Employee do
 
+  before :each do
+    Employee.destroy
+  end
+
   context "employee_type" do
     it 'admin is valid' do
       employee = Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
@@ -64,18 +68,24 @@ describe Employee do
 
   context "checking employee type" do
     it "returns true if an employee is of admin type" do
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
       expect(Employee.all.first.admin?).to eq(true)
     end
 
     it "returns false is employee is not of admin type" do
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+      Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
       expect(Employee.all[1].admin?).to eq(false)
     end
 
     it "returns true if an employee is of non-admin type" do
+       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+       Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
       expect(Employee.all[1].non_admin?).to eq(true)
     end
 
     it "returns false if an employee is not of non-admin type" do
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
       expect(Employee.all.first.non_admin?).to eq(false)
     end
   end

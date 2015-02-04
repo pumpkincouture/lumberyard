@@ -26,4 +26,5 @@ RSpec.configure do |config|
   config.color = true
   config.formatter = :documentation
   config.include Rack::Test::Methods
+  config.order = :rand
 end
