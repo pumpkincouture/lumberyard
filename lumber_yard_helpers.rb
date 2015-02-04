@@ -1,5 +1,6 @@
 require_relative 'lib/lumberlogger.rb'
 require_relative 'lib/client.rb'
+require_relative 'lib/employee.rb'
 
 module LumberYardHelpers
 
@@ -11,20 +12,24 @@ module LumberYardHelpers
     Client.new
   end
 
+  def employee_instance
+    Employee.new
+  end
+
   def admin?(params)
-    include_logger.find_employee(params).employee_type == "admin"
+    Employee.first(:username => params.downcase).admin?
   end
 
   def non_admin?(params)
-    include_logger.find_employee(params).employee_type == "non-admin"
+    Employee.first(:username => params.downcase).non_admin?
   end
 
   def employee_exists?(params)
-    include_logger.employee_exists?(params)
+    !Employee.all(:username => params.downcase).empty? ? true : false
   end
 
   def find_employee(params)
-    include_logger.find_employee(params)
+    Employee.first(:username => params.downcase)
   end
 
   def get_correct_form(choice)
@@ -41,7 +46,7 @@ module LumberYardHelpers
   end
 
   def valid_employee?(attributes)
-    include_logger.create_employee(attributes).valid?
+    employee_instance.create_employee(attributes).valid?
   end
 
   def valid_client?(attributes)

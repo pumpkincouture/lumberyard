@@ -53,7 +53,6 @@ describe LumberLogger do
         last_name: "Cheesecake",
         username: nil,
         employee_type: "non-admin",
-        client: ""
         })
       expect(Employee.last.username).to_not eq(nil)
     end

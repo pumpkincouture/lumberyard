@@ -16,6 +16,23 @@ class Employee
   validates_with_method :username, :method => :valid_username?
   validates_with_method :employee_type, :method => :valid_employee_type?
 
+  def create_employee(attributes)
+    Employee.create(
+      :first_name => attributes.fetch(:first_name),
+      :last_name => attributes.fetch(:last_name),
+      :username => attributes.fetch(:username),
+      :employee_type => attributes.fetch(:employee_type)
+      )
+  end
+
+  def non_admin?
+    employee_type == 'non-admin'
+  end
+
+  def admin?
+    employee_type == 'admin'
+  end
+
   private
 
   def valid_employee_type?
