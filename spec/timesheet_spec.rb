@@ -4,6 +4,10 @@ require 'spec_helper'
 
 describe Timesheet do
 
+  before :each do
+    Timesheet.destroy
+  end
+
   context "timesheet attributes" do
     it "requires all fields to be valid" do
       timesheet = Timesheet.create(
