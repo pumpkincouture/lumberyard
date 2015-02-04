@@ -14,66 +14,65 @@ describe 'LumberYard App' do
     it "asks the user for their username" do
       get '/'
 
-      expect(last_response.body).to include("Please enter your employee username to get started.")
+      expect(last_response.status).to eq(200)
     end
 
     it "redirects to error page if user is not found" do
       post '/username', {"username_name" => 'radams'}
       expect(last_request.path).to eq('/username')
-      expect(last_response.body).to include("That username is invalid. Please input your username.")
+      expect(last_response.status).to eq(200)
     end
   end
 
   context "main options page for employee" do
     it "display admin page if employee is type admin" do
       post '/username', {"username_name" => 'dlockhart'}
-      expect(last_response.body).to include("Welcome, Diane")
-      expect(last_response.body).to include("Add client")
+      expect(last_response.status).to eq(200)
     end
 
     it "displays non admin page if employee is not admin" do
       post '/username', {"username_name" => 'echeesecake'}
-      expect(last_response.body).to_not include("Add client")
-      expect(last_response.body).to include("Welcome, Eli")
+      expect(last_response.status).to eq(200)
     end
   end
 
   context "admin employee chooses an action" do
     it "allows the employee to log time" do
       post '/selection', {"option" => "1"}
-      expect(last_response.body).to include("Please input the project date using this format : YYYY/MM/DD")
+      expect(last_request.path).to eq('/selection')
+      expect(last_response.status).to eq(200)
     end
 
     it "allows the employee to request time report" do
       post '/selection', {"option" => "2"}
-      expect(last_response.body).to include("No time to display for this month.")
+      expect(last_response.status).to eq(200)
     end
 
     it "allows the employee to add an employee" do
       post '/selection', {"option" => "3"}
-      expect(last_response.body).to include("Please enter employee first name.")
+      expect(last_response.status).to eq(200)
     end
 
     it "allows the employee to add a client" do
       post '/selection', {"option" => "4"}
-      expect(last_response.body).to include("Please enter client name.")
+      expect(last_response.status).to eq(200)
     end
 
     it "allows the employee to request employee report" do
       post '/selection', {"option" => "5"}
-      expect(last_response.body).to include("No time to display for this month.")
+      expect(last_response.status).to eq(200)
     end
   end
 
   context "non-admin employee chooses an action" do
     it "allows the employee to log time" do
       post '/selection', {"option" => "1"}
-      expect(last_response.body).to include("Please input the project type.")
+      expect(last_response.status).to eq(200)
     end
 
     it "allows the employee to request time report" do
       post '/selection', {"option" => "2"}
-      expect(last_response.body).to include("No time to display for this month.")
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -84,8 +83,8 @@ describe 'LumberYard App' do
         "last_name" => "Olak",
         "username" => "solak",
         "employee_type" => 'non-admin'}
-      follow_redirect!
       expect(last_request.path).to eq('/add_employee')
+      expect(last_response.status).to eq(302)
     end
 
     it "displays success page if input is valid" do
@@ -94,7 +93,7 @@ describe 'LumberYard App' do
         "last_name" => "Olak",
         "username" => "solak",
         "employee_type" => 'non-admin'}
-      expect(last_response.body).to include("Your employee has been successfully added!")
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -105,6 +104,7 @@ describe 'LumberYard App' do
         "type" => "Standard"
         }
       expect(last_request.path).to eq('/add_client')
+      expect(last_response.status).to eq(302)
     end
 
     it "displays success page if input is valid" do
@@ -112,7 +112,7 @@ describe 'LumberYard App' do
         "name" => "Allegra",
         "type" => "Standard"
         }
-      expect(last_response.body).to include("Your client has been successfully added!")
+      expect(last_response.status).to eq(200)
     end
   end
 
@@ -126,6 +126,7 @@ describe 'LumberYard App' do
         "client" => ""
       }
       expect(last_request.path).to eq('/billing')
+      expect(last_response.status).to eq(302)
     end
 
     it "displays success page if input is valid" do
@@ -136,7 +137,7 @@ describe 'LumberYard App' do
         "project_type" => "non-billable",
         "client" => ""
       }
-      expect(last_response.body).to include("Time has been successfully logged!")
+      expect(last_response.status).to eq(200)
     end
 
     it "redirects if client input is invalid" do
@@ -148,6 +149,7 @@ describe 'LumberYard App' do
         "client" => ""
       }
       expect(last_request.path).to eq('/billing')
+      expect(last_response.status).to eq(302)
     end
 
     it "displays success page if client input is valid" do
@@ -158,7 +160,7 @@ describe 'LumberYard App' do
         "project_type" => "billable",
         "client" => "Allegra"
       }
-      expect(last_response.body).to include("Time has been successfully logged!")
+      expect(last_response.status).to eq(200)
     end
   end
 end
