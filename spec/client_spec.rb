@@ -4,10 +4,6 @@ require 'spec_helper'
 
 describe Client do
 
-  before :each do
-    @client = Client.new
-  end
-
   context "client attributes" do
     it "requires name and type" do
       client = Client.create(:name => "Praxair", :type => "Standard")
@@ -31,7 +27,8 @@ describe Client do
   end
 
   context "creating clients" do
-    it "makes sure client creation is valid" do
+    it "only allows valid client creation" do
+      @client = Client.new
       attributes = ({
         name: "Cleanliving",
         type: "Standard"
@@ -39,20 +36,20 @@ describe Client do
       expect(@client.create_client(attributes).valid?).to eq(true)
     end
 
-    it "does not allow creation of invalid clients" do
-        attributes = ({
-          name: nil,
-          type: "Standard"
-        })
-        expect(@client.create_client(attributes).valid?).to eq(false)
-    end
-
-    it "doesn't write invalid client to database" do
+    it "does not allow invalid clients to be written to database" do
+      @client = Client.new
       attributes =({
         name: nil,
         type: "Standard"
         })
       expect(@client.create_client(attributes).valid?).to eq(false)
+    end
+  end
+
+  context "finding clients from the database" do
+    it "finds all clients located in the database" do
+      @client = Client.new
+      expect(@client.get_all_clients.first.name).to eq("Praxair")
     end
   end
 end

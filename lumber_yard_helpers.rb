@@ -1,9 +1,14 @@
 require_relative 'lib/lumberlogger.rb'
+require_relative 'lib/client.rb'
 
 module LumberYardHelpers
 
   def include_logger
     LumberLogger.new
+  end
+
+  def client_instance
+    Client.new
   end
 
   def admin?(params)
@@ -28,7 +33,7 @@ module LumberYardHelpers
   end
 
   def get_all_clients
-    include_logger.get_all_clients
+    client_instance.get_all_clients
   end
 
   def get_timesheet
@@ -40,7 +45,7 @@ module LumberYardHelpers
   end
 
   def valid_client?(attributes)
-    include_logger.create_client(attributes).valid?
+    client_instance.create_client(attributes).valid?
   end
 
   def valid_timesheet?(attributes)

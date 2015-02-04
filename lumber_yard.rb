@@ -85,7 +85,7 @@ get '/add_client' do
 end
 
 post '/add_client' do
-  until Client.valid_client?({
+  until valid_client?({
     name: params[:name],
     type: params[:type]
     })
