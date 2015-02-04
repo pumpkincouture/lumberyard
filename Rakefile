@@ -1,11 +1,11 @@
 task :run do
-  system 'ruby ./lumberyard.rb'
+  system 'ruby ./lumber_yard.rb'
 end
 
 task :server do
   system 'heroku run --app lumberyard-sinatra irb -I'
 end
 
-#When running above, input load './lumberyard.rb'
+#When running above, input load './lumber_yard.rb'
 
 task :default => :run

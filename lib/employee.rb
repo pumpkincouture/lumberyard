@@ -1,9 +1,7 @@
 require 'data_mapper'
-require_relative 'lumberyard_constants.rb'
 
 class Employee
   include DataMapper::Resource
-  include LumberYardConstants
 
   attr_reader :first_name, :last_name, :username, :employee_type
 
@@ -21,7 +19,7 @@ class Employee
   private
 
   def valid_employee_type?
-    EMPLOYEE_TYPES.include?(employee_type)
+    ['admin', 'non-admin'].include?(employee_type)
   end
 
   def valid_employee_fields?

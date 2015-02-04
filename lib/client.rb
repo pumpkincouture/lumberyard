@@ -12,6 +12,13 @@ class Client
   validates_with_method :name, :method => :valid_name?
   validates_with_method :type, :method => :valid_type?
 
+ def create_client(attributes)
+    Client.create(
+      :name => attributes.fetch(:name),
+      :type => attributes.fetch(:type)
+      )
+  end
+
   private
 
   def valid_name?
@@ -20,5 +27,9 @@ class Client
 
   def valid_type?
     !type.nil? && !type.empty?
+  end
+
+  def valid_client?(attributes)
+     create_client(attributes).valid?
   end
 end

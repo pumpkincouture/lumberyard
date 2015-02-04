@@ -1,12 +1,11 @@
 require 'data_mapper'
 require 'rack/test'
-require 'rspec-html-matchers'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
 require './lib/lumberlogger.rb'
-require './lumberyard_helpers.rb'
-require './lumberyard.rb'
+require './lumber_yard_helpers.rb'
+require './lumber_yard.rb'
 
 DataMapper.setup(:default, "sqlite::memory:")
 DataMapper.finalize

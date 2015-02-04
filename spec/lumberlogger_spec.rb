@@ -27,6 +27,15 @@ describe LumberLogger do
       expect(Client.last.name).to eq("Cleanliving")
     end
 
+    it "doesn't write invalid client to database" do
+      attributes =({
+        name: nil,
+        type: "Standard"
+        })
+      expect(@lumberlogger.create_client(attributes).valid?).to eq(false)
+    end
+
+
     it "writes valid timesheet to database" do
       @lumberlogger.create_timesheet({
         username: "egold",

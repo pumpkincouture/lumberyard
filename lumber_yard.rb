@@ -1,5 +1,5 @@
 require 'sinatra'
-require_relative 'lumberyard_helpers.rb'
+require_relative 'lumber_yard_helpers.rb'
 require_relative 'lib/client.rb'
 require_relative 'lib/employee.rb'
 require_relative 'lib/timesheet.rb'
@@ -85,7 +85,7 @@ get '/add_client' do
 end
 
 post '/add_client' do
-  until valid_client?({
+  until Client.valid_client?({
     name: params[:name],
     type: params[:type]
     })

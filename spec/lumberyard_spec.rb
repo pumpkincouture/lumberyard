@@ -7,11 +7,13 @@ describe 'LumberYard App' do
   context "main page of app" do
     it "displays the title of the app" do
       get '/'
-      expect(last_response.body).to include("LumberYard")
+
+      expect(last_response.status).to eq(200)
     end
 
     it "asks the user for their username" do
       get '/'
+
       expect(last_response.body).to include("Please enter your employee username to get started.")
     end
 

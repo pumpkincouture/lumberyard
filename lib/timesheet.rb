@@ -1,10 +1,8 @@
 require 'date'
 require 'data_mapper'
-require_relative 'lumberyard_constants.rb'
 
 class TimeSheet
   include DataMapper::Resource
-  include LumberYardConstants
 
   attr_reader :username, :date, :hours, :project_type, :client
 
@@ -13,7 +11,7 @@ class TimeSheet
   property :date, String
   property :hours, String
   property :project_type, String
-  property :client, String, :default => NA
+  property :client, String, :default => "NA"
 
   validates_with_method :username, :all_fields_present?
   validates_with_method :date, :valid_date?
@@ -35,7 +33,7 @@ class TimeSheet
   end
 
   def client_field_still_na?
-    need_client_field? && client == NA
+    need_client_field? && client == "NA"
   end
 
   def client_field_still_invalid?
@@ -47,7 +45,7 @@ class TimeSheet
   end
 
   def project_billable?
-    BILLABLE.include?(project_type)
+    ['billable', 'Billable'].include?(project_type)
   end
 
   def all_fields_present?
@@ -59,7 +57,7 @@ class TimeSheet
   end
 
   def project_type_valid?
-    PROJECT_TYPES.include?(project_type)
+    ['billable', 'Billable', 'non-billable', 'Non-billable', 'pto', 'PTO'].include?(project_type)
   end
 
   def valid_date?

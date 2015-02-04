@@ -1,19 +1,17 @@
 require_relative 'lib/lumberlogger.rb'
-require_relative 'lib/lumberyard_constants.rb'
 
 module LumberYardHelpers
-  include LumberYardConstants
 
   def include_logger
     LumberLogger.new
   end
 
   def admin?(params)
-    include_logger.find_employee(params).employee_type == ADMIN
+    include_logger.find_employee(params).employee_type == "admin"
   end
 
   def non_admin?(params)
-    include_logger.find_employee(params).employee_type == NONADMIN
+    include_logger.find_employee(params).employee_type == "non-admin"
   end
 
   def employee_exists?(params)
@@ -25,7 +23,8 @@ module LumberYardHelpers
   end
 
   def get_correct_form(choice)
-    FORMS[choice.to_i - 1].to_sym
+    forms = ["log_time", "time_report", "add_employee", "add_client", "employee_report"]
+    forms[choice.to_i - 1].to_sym
   end
 
   def get_all_clients
