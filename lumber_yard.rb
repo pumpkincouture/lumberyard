@@ -19,10 +19,6 @@ get '/' do
   erb :home
 end
 
-get '/username' do
-  LumberYard::Employee.new.get_employee(params["username_name"])
-end
-
 post '/username' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
     erb :user_not_found
@@ -42,9 +38,9 @@ post '/selection' do
   erb get_correct_form(choice)
 end
 
-get '/billing' do
+get '/billing_failure' do
   @clients = LumberYard::Client.new.get_all_clients
-  erb :log_time
+  erb :billing_failure
 end
 
 post '/billing' do
@@ -56,14 +52,14 @@ post '/billing' do
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    redirect '/billing'
+    redirect '/billing_failure'
   end
   erb :billing_success
 end
 
-get '/add_employee' do
+get '/add_employee_failure' do
   @clients = LumberYard::Client.new.get_all_clients
-  erb :add_employee
+  erb :add_employee_failure
 end
 
 post '/add_employee' do
@@ -74,13 +70,13 @@ post '/add_employee' do
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    redirect '/add_employee'
+    redirect '/add_employee_failure'
   end
   erb :add_employee_success
 end
 
-get '/add_client' do
-  erb :add_client
+get '/add_client_failure' do
+  erb :add_client_failure
 end
 
 post '/add_client' do
@@ -88,7 +84,7 @@ post '/add_client' do
     name: params[:name],
     type: params[:type]
     }).valid?
-    redirect '/add_client'
+    redirect '/add_client_failure'
   end
   erb :add_client_success
 end
