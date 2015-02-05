@@ -68,25 +68,46 @@ describe Employee do
 
   context "checking employee type" do
     it "returns true if an employee is of admin type" do
+      @employee = Employee.new
       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
-      expect(Employee.all.first.admin?).to eq(true)
+      expect(@employee.admin?('dsmith')).to eq(true)
     end
 
     it "returns false is employee is not of admin type" do
-      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+      @employee = Employee.new
       Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
-      expect(Employee.all[1].admin?).to eq(false)
+      expect(@employee.admin?('egold')).to eq(false)
     end
 
     it "returns true if an employee is of non-admin type" do
-       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
-       Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
-      expect(Employee.all[1].non_admin?).to eq(true)
+      @employee = Employee.new
+      Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
+      expect(@employee.non_admin?('egold')).to eq(true)
     end
 
     it "returns false if an employee is not of non-admin type" do
+      @employee = Employee.new
       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
-      expect(Employee.all.first.non_admin?).to eq(false)
+      expect(@employee.non_admin?('dsmith')).to eq(false)
+    end
+  end
+
+  context "finding employee in database" do
+    it "returns true if employee is found in database" do
+      @employee = Employee.new
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+      expect(@employee.employee_exists?('dsmith')).to eq(true)
+    end
+
+    it "returns false if employee is not found" do
+      @employee = Employee.new
+      expect(@employee.employee_exists?('dsmith')).to eq(false)
+    end
+
+    it "returns the Employee object if found" do
+      @employee = Employee.new
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+      expect(@employee.get_employee('dsmith').first_name).to eq('David')
     end
   end
 end

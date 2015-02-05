@@ -3,7 +3,6 @@ require 'rack/test'
 require './lib/employee.rb'
 require './lib/client.rb'
 require './lib/timesheet.rb'
-require './lumber_yard_helpers.rb'
 require './lumber_yard.rb'
 
 DataMapper.setup(:default, "sqlite::memory:")

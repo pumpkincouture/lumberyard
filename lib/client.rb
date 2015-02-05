@@ -1,35 +1,42 @@
-class Client
-  require 'data_mapper'
+require 'data_mapper'
 
-  include DataMapper::Resource
+module LumberYard
+  class Client
 
-  attr_reader :name, :type
+    include DataMapper::Resource
 
-  property :id, Serial
-  property :name, String
-  property :type, String
+    attr_reader :name, :type
 
-  validates_with_method :name, :method => :valid_name?
-  validates_with_method :type, :method => :valid_type?
+    property :id, Serial
+    property :name, String
+    property :type, String
 
-  def get_all_clients
-    Client.all
-  end
+    validates_with_method :name, :method => :valid_name?
+    validates_with_method :type, :method => :valid_type?
 
- def create_client(attributes)
-    Client.create(
-      :name => attributes.fetch(:name),
-      :type => attributes.fetch(:type)
-      )
-  end
+    def get_all_clients
+      get_all_clients_from_database
+    end
 
-  private
+   def create_client(attributes)
+      Client.create(
+        :name => attributes.fetch(:name),
+        :type => attributes.fetch(:type)
+        )
+    end
 
-  def valid_name?
-    !name.nil? && !name.empty?
-  end
+    private
 
-  def valid_type?
-    !type.nil? && !type.empty?
+    def valid_name?
+      !name.nil? && !name.empty?
+    end
+
+    def valid_type?
+      !type.nil? && !type.empty?
+    end
+
+    def get_all_clients_from_database
+      Client.all
+    end
   end
 end
