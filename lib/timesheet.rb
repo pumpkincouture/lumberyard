@@ -59,6 +59,7 @@ module LumberYard
       project_billable? ? true : false
     end
 
+
     def project_billable?
       ['billable', 'Billable'].include?(project_type)
     end

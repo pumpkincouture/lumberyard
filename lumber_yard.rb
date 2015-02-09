@@ -19,6 +19,20 @@ get '/' do
   erb :home
 end
 
+get '/billing' do
+  @clients = LumberYard::Client.new.get_all_clients
+  erb :log_time
+end
+
+get '/add_employee' do
+  @clients = LumberYard::Client.new.get_all_clients
+  erb :add_employee
+end
+
+get '/add_client' do
+  erb :add_client
+end
+
 post '/username' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
     erb :user_not_found
@@ -38,11 +52,6 @@ post '/selection' do
   erb get_correct_form(choice)
 end
 
-get '/billing_failure' do
-  @clients = LumberYard::Client.new.get_all_clients
-  erb :billing_failure
-end
-
 post '/billing' do
   @clients = LumberYard::Client.new.get_all_clients
   until LumberYard::Timesheet.new.create_timesheet({
@@ -52,14 +61,11 @@ post '/billing' do
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    redirect '/billing_failure'
+    @message = "That is not a valid timesheet, please try again."
+    redirect '/billing'
   end
+  @message = "You have successfully logged time."
   erb :billing_success
-end
-
-get '/add_employee_failure' do
-  @clients = LumberYard::Client.new.get_all_clients
-  erb :add_employee_failure
 end
 
 post '/add_employee' do
@@ -70,13 +76,11 @@ post '/add_employee' do
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    redirect '/add_employee_failure'
+    @message = "That is not a valid employee, please try again."
+    redirect '/add_employee'
   end
+  @message = "Employee has been successfully added."
   erb :add_employee_success
-end
-
-get '/add_client_failure' do
-  erb :add_client_failure
 end
 
 post '/add_client' do
@@ -84,8 +88,10 @@ post '/add_client' do
     name: params[:name],
     type: params[:type]
     }).valid?
-    redirect '/add_client_failure'
+    @message = "That is not a valid client, please try again."
+    redirect '/add_client'
   end
+  @message = "Client has been successfully added."
   erb :add_client_success
 end
 
