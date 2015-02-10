@@ -12,5 +12,10 @@
       <p>Non-Admin</p>
         <input type="radio" name="employee_type" value="non-admin"/></br>
   <input type="submit" class="submit-button">
+  <% if @success == true %>
+    <h3 class ="client_success"><%= @message %></h3>
+  <% else %>
+    <h3 class ="client_success"><%= @message %></h3>
+  <% end %>
 </form>
 </section>

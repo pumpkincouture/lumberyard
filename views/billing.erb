@@ -21,5 +21,10 @@
     <% end %>
   </select></br>
   <input type="submit" class="submit-button">
+  <% if @success == true %>
+    <h3 class ="client_success"> <%= @message %></h3>
+  <% else %>
+    <h3 class ="client_success"> <%= @message %></h3>
+  <% end %>
 </form>
 </section>

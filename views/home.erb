@@ -1,5 +1,9 @@
 <section id="add">
+<% if @message == "username_failure" %>
+<h2 class = "username_prompt">That entry is not valid, please enter a valid username.</h2>
+<% else %>
 <h2 class = "username_prompt">Please enter your employee username to get started.</h2>
+<% end %>
 <form action="/username" method="post">
   <input type="textbox" name="username_name"></br>
   <input type="submit" class="submit-button">

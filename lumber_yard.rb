@@ -19,13 +19,27 @@ get '/' do
   erb :home
 end
 
-get '/username' do
-  LumberYard::Employee.new.get_employee(params["username_name"])
+get '/billing' do
+  @clients = LumberYard::Client.new.get_all_clients
+  @message = "That is not a valid timesheet, please try again."
+  erb :billing
+end
+
+get '/add_employee' do
+  @clients = LumberYard::Client.new.get_all_clients
+  @message = "That is not a valid employee, please try again."
+  erb :add_employee
+end
+
+get '/add_client' do
+  @message = "That is not a valid client, please try again."
+  erb :add_client
 end
 
 post '/username' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
-    erb :user_not_found
+    @message = "username_failure"
+    erb :home
   elsif LumberYard::Employee.new.admin?(params["username_name"])
     @employee = LumberYard::Employee.new.get_employee(params["username_name"])
     erb :admin_form
@@ -42,11 +56,6 @@ post '/selection' do
   erb get_correct_form(choice)
 end
 
-get '/billing' do
-  @clients = LumberYard::Client.new.get_all_clients
-  erb :log_time
-end
-
 post '/billing' do
   @clients = LumberYard::Client.new.get_all_clients
   until LumberYard::Timesheet.new.create_timesheet({
@@ -58,12 +67,9 @@ post '/billing' do
     }).valid?
     redirect '/billing'
   end
-  erb :billing_success
-end
-
-get '/add_employee' do
-  @clients = LumberYard::Client.new.get_all_clients
-  erb :add_employee
+  @success = true
+  @message = "Your timesheet has been successfully saved."
+  erb :billing
 end
 
 post '/add_employee' do
@@ -76,11 +82,9 @@ post '/add_employee' do
     }).valid?
     redirect '/add_employee'
   end
-  erb :add_employee_success
-end
-
-get '/add_client' do
-  erb :add_client
+  @success = true
+  @message = "Employee successfully added!"
+  erb :add_employee
 end
 
 post '/add_client' do
@@ -90,12 +94,14 @@ post '/add_client' do
     }).valid?
     redirect '/add_client'
   end
-  erb :add_client_success
+  @success = true
+  @message = "Client successfully added!"
+  erb :add_client
 end
 
 private
 
 def get_correct_form(choice)
-    forms = ["log_time", "time_report", "add_employee", "add_client", "employee_report"]
+    forms = ["billing", "time_report", "add_employee", "add_client", "employee_report"]
     forms[choice.to_i - 1].to_sym
 end

@@ -4,6 +4,12 @@ require 'rack/test'
 describe 'LumberYard App' do
   include Rack::Test::Methods
 
+  before :each do
+    Employee.destroy
+    Client.destroy
+    Timesheet.destroy
+  end
+
   def get_correct_form(choice)
     forms = ["log_time", "time_report", "add_employee", "add_client", "employee_report"]
     forms[choice.to_i - 1].to_sym
@@ -22,7 +28,7 @@ describe 'LumberYard App' do
       expect(last_response.status).to eq(200)
     end
 
-    it "redirects to error page if user is not found" do
+    it "displays home page with error message if user is not found" do
       post '/username', {"username_name" => 'radams'}
       expect(last_request.path).to eq('/username')
       expect(last_response.status).to eq(200)
@@ -31,12 +37,14 @@ describe 'LumberYard App' do
 
   context "main options page for employee" do
     it "display admin page if employee is type admin" do
-      post '/username', {"username_name" => 'dlockhart'}
+      Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
+      post '/username', {"username_name" => 'dsmith'}
       expect(last_response.status).to eq(200)
     end
 
     it "displays non admin page if employee is not admin" do
-      post '/username', {"username_name" => 'echeesecake'}
+      Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
+      post '/username', {"username_name" => 'egold'}
       expect(last_response.status).to eq(200)
     end
   end
