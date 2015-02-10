@@ -62,11 +62,11 @@ module LumberYard
     end
 
     def employee_admin?(employee)
-      employee.employee_type == 'admin'
+      ["admin"].include?(employee.employee_type)
     end
 
     def employee_non_admin?(employee)
-      employee.employee_type == 'non-admin'
+      ["non-admin"].include?(employee.employee_type)
     end
 
     def employee_in_database?(employee)
