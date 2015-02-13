@@ -1,4 +1,5 @@
 require 'data_mapper'
+require 'model_citizen'
 
 module LumberYard
   class Client
@@ -11,8 +12,8 @@ module LumberYard
     property :name, String
     property :type, String
 
-    validates_with_method :name, :method => :valid_name?
-    validates_with_method :type, :method => :valid_type?
+    validates_with_method :name, :method => :valid_attribute?
+    validates_with_method :type, :method => :valid_attribute?
 
     def get_all_clients
       get_all_clients_from_database
@@ -27,12 +28,8 @@ module LumberYard
 
     private
 
-    def valid_name?
-      !name.nil? && !name.empty?
-    end
-
-    def valid_type?
-      !type.nil? && !type.empty?
+    def valid_attribute?
+      ModelCitizen::Validations.new.not_nil_or_empty?([name, type])
     end
 
     def get_all_clients_from_database

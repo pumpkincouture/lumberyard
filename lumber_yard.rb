@@ -14,29 +14,29 @@ LumberYard::Timesheet.new
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
-get '/' do
+get '/' do        # home page
   @title = "LumberYard"
   erb :home
 end
 
-get '/billing' do
+get '/billing' do     # combine with post /timesheets
   @clients = LumberYard::Client.new.get_all_clients
   @message = "That is not a valid timesheet, please try again."
   erb :billing
 end
 
-get '/add_employee' do
+get '/add_employee' do   # combine with post /employees
   @clients = LumberYard::Client.new.get_all_clients
   @message = "That is not a valid employee, please try again."
   erb :add_employee
 end
 
-get '/add_client' do
+get '/add_client' do    # combine with post /clients
   @message = "That is not a valid client, please try again."
   erb :add_client
 end
 
-post '/username' do
+post '/username' do     # logged in home page vs logged out home page
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
     @message = "username_failure"
     erb :home
@@ -49,14 +49,14 @@ post '/username' do
   end
 end
 
-post '/selection' do
+post '/selection' do    # multiple resource/new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet
   @clients = LumberYard::Client.new.get_all_clients
   choice = params["option"]
   erb get_correct_form(choice)
 end
 
-post '/billing' do
+post '/billing' do  # post '/timesheets'
   @clients = LumberYard::Client.new.get_all_clients
   until LumberYard::Timesheet.new.create_timesheet({
     username: params[:username],
@@ -72,7 +72,7 @@ post '/billing' do
   erb :billing
 end
 
-post '/add_employee' do
+post '/add_employee' do   # post '/employees'
   @clients = LumberYard::Client.new.get_all_clients
   until LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
@@ -87,7 +87,7 @@ post '/add_employee' do
   erb :add_employee
 end
 
-post '/add_client' do
+post '/add_client' do # post '/clients'
   until LumberYard::Client.new.create_client({
     name: params[:name],
     type: params[:type]

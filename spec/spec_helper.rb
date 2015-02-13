@@ -1,4 +1,3 @@
-require 'data_mapper'
 require 'rack/test'
 require './lib/employee.rb'
 require './lib/client.rb'
