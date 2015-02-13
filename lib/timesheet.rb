@@ -1,5 +1,5 @@
-require 'date'
 require 'data_mapper'
+require 'model_citizen'
 
 module LumberYard
   class Timesheet
@@ -14,12 +14,16 @@ module LumberYard
     property :project_type, String
     property :client, String, :default => "NA"
 
-    validates_with_method :username, :all_fields_present?
+    validates_with_method :username, :valid_attribute?
     validates_with_method :date, :valid_date?
-    validates_with_method :hours, :all_fields_present?
-    validates_with_method :project_type, :all_fields_present?
-    validates_with_method :project_type, :project_type_valid?
+    validates_with_method :hours, :valid_attribute?
+    validates_with_method :project_type, :valid_attribute?
+    validates_with_method :project_type, :valid_attribute?
     validates_with_method :client, :client_valid?
+
+    def model_citizen
+      model_citizen = ModelCitizen::Validations.new
+    end
 
     def create_timesheet(attributes)
       Timesheet.create(
@@ -37,61 +41,32 @@ module LumberYard
 
     private
 
-    def project_type_valid_and_present?
-      all_fields_present && project_type_valid?
+    def valid_attribute?
+      model_citizen.not_nil_or_empty?([username, date, hours, project_type]) &&
+      model_citizen.value_included?('billable', 'Billable', 'non-billable', 'Non-billable', 'pto', 'PTO', project_type)
     end
 
     def client_valid?
-      return false if client_field_still_na?
-      return false if client_field_still_invalid?
-      true
+      unless client_field_still_na? || client_field_still_invalid?
+        return true
+      end
+      false
     end
 
     def client_field_still_na?
-      need_client_field? && client == "NA"
+      model_citizen.value_included?('billable', 'Billable', project_type) && client == "NA"
     end
 
     def client_field_still_invalid?
-      need_client_field? && !present?(client)
-    end
-
-    def need_client_field?
-      project_billable? ? true : false
-    end
-
-
-    def project_billable?
-      ['billable', 'Billable'].include?(project_type)
-    end
-
-    def all_fields_present?
-      [username, date, hours, project_type].all? {|field| present?(field)}
-    end
-
-    def present?(field)
-      !field.nil? && !field.empty?
-    end
-
-    def project_type_valid?
-      ['billable', 'Billable', 'non-billable', 'Non-billable', 'pto', 'PTO'].include?(project_type)
+      model_citizen.value_included?('billable', 'Billable', project_type) && !model_citizen.not_nil_or_empty?([client])
     end
 
     def valid_date?
-      valid_string_format? && past_date?
+      model_citizen.valid_date?(date)
     end
 
-    def valid_string_format?
-      y, m, d = date.split '/'
-      return false if y.to_i == 0
-      Date.valid_date? y.to_i, m.to_i, d.to_i
-    end
-
-    def past_date?
-      Date.parse(date) < Date.today
-    end
-
-     def get_this_month
-      Date.today.month.to_s
+    def get_this_month
+      model_citizen.get_this_month
     end
 
     def get_timesheet_from_database
