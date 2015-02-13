@@ -22,18 +22,18 @@ end
 
 get '/billing' do     # combine with post /timesheets
   @clients = LumberYard::Client.new.get_all_clients
-  @message = "That is not a valid timesheet, please try again."
+  @message = ModelCitizen::Messages.new.get_message("invalid_choice")
   erb :billing
 end
 
 get '/add_employee' do   # combine with post /employees
   @clients = LumberYard::Client.new.get_all_clients
-  @message = "That is not a valid employee, please try again."
+  @message = ModelCitizen::Messages.new.get_message("invalid_choice")
   erb :add_employee
 end
 
 get '/add_client' do    # combine with post /clients
-  @message = "That is not a valid client, please try again."
+  @message = ModelCitizen::Messages.new.get_message("invalid_choice")
   erb :add_client
 end
 
