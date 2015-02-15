@@ -1,12 +1,12 @@
 <section id="add">
-<form action="/add_employee" method="post">
-  <p>Please enter employee first name.</p>
+<form action="/employees/create" method="post">
+  <p><%= @options.get_message("enter_employee_first") %></p>
   <input type="textbox" name="first_name"></br>
-  <p>Please enter employee last name.</p>
+  <p><%= @options.get_message("enter_employee_last") %></p>
   <input type="textbox" name="last_name"></br>
-  <p>Please enter employee username.</p>
+  <p><%= @options.get_message("enter_employee_username") %></p>
   <input type="textbox" name="username"></br>
-  <p>Please choose employee type.</p>
+  <p><%= @options.get_message("enter_employee_type") %></p>
     <p>Admin</p>
         <input type="radio" name="employee_type" value="admin"/>
       <p>Non-Admin</p>
