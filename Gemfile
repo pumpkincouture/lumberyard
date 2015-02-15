@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'datamapper'
 gem 'sinatra'
-gem 'model_citizen', '~> 0.0.4'
+gem 'model_citizen', '~> 0.0.5'
 
 group :production do
     gem "dm-postgres-adapter"

@@ -6,7 +6,7 @@
   <input type="textbox" name="date"></br>
   <p><%= @options.get_message("enter_hours") %></p>
     <input type="textbox" name="hours"></br>
-  <p><%= @options.get_message("choose_action") %></p>
+  <p><%= @options.get_message("enter_billing_type") %></p>
       <p>PTO</p>
         <input type="radio" name="project_type" value="pto"/>
       <p>Billable</p>
@@ -14,7 +14,7 @@
       <p>Non-Billable</p>
         <input type="radio" name="project_type" value="non-billable" /></br>
   <p><%= @options.get_message("enter_client_name") %></p>
-  <select class="client_options">
+  <select class="client_options">b
      <% @clients.each do |client| %>
       <option name ="client" value=<%= client.name %>><%= client.name %></option>
     <% end %>
