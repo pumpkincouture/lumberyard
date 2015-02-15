@@ -62,46 +62,58 @@ end
 
 post '/timesheets/create' do
   @clients = LumberYard::Client.new.get_all_clients
-  until LumberYard::Timesheet.new.create_timesheet({
+  if !LumberYard::Timesheet.new.create_timesheet({
     username: params[:username],
     date: params[:date],
     hours: params[:hours],
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    redirect '/timesheets/new'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_timesheet")
+    erb :'timesheets/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("timesheet_success")
+    erb :'timesheets/form'
   end
-  @options = ModelCitizen::Messages.new
-  @success = true
-  @message = ModelCitizen::Messages.new.get_message("timesheet_success")
-  erb :'timesheets/form'
 end
 
 post '/employees/create' do
   @clients = LumberYard::Client.new.get_all_clients
-  until LumberYard::Employee.new.create_employee({
+  if !LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
     last_name: params[:last_name],
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    redirect '/employee/new'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_employee")
+    erb :'employee/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("employee_success")
+    erb :'employee/form'
   end
-  @options = ModelCitizen::Messages.new
-  @success = true
-  @message = ModelCitizen::Messages.new.get_message("employee_success")
-  erb :'employee/form'
 end
 
 post '/clients/create' do
-  until LumberYard::Client.new.create_client({
+  if !LumberYard::Client.new.create_client({
     name: params[:name],
     type: params[:type]
     }).valid?
-    redirect '/client/new'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_client")
+    erb :'client/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("client_success")
+    erb :'client/form'
   end
-  @options = ModelCitizen::Messages.new
-  @success = true
-  @message = ModelCitizen::Messages.new.get_message("client_success")
-  erb :'client/form'
 end

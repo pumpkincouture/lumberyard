@@ -50,17 +50,17 @@ describe 'LumberYard App' do
   end
 
   context "admin employee can add employee" do
-    it "redirects if input is invalid" do
+    it "renders employee page with error message if input is invalid" do
       post '/employees/create', {
         "first_name" => nil,
         "last_name" => "Olak",
         "username" => "solak",
         "employee_type" => 'non-admin'}
       expect(last_request.path).to eq('/employees/create')
-      expect(last_response.status).to eq(302)
+      expect(last_response.status).to eq(200)
     end
 
-    it "displays success page if input is valid" do
+    it "renders employee page with success message if input is valid" do
       post '/employees/create', {
         "first_name" => "Sylwia",
         "last_name" => "Olak",
@@ -71,16 +71,16 @@ describe 'LumberYard App' do
   end
 
   context "admin employee can add client" do
-    it "redirects if input is invalid" do
+    it "renders client page with error message if input is invalid" do
       post '/clients/create', {
         "name" => nil,
         "type" => "Standard"
         }
       expect(last_request.path).to eq('/clients/create')
-      expect(last_response.status).to eq(302)
+      expect(last_response.status).to eq(200)
     end
 
-    it "displays success page if input is valid" do
+    it "renders client page with success message if input is valid" do
        post '/clients/create', {
         "name" => "Allegra",
         "type" => "Standard"
@@ -90,7 +90,7 @@ describe 'LumberYard App' do
   end
 
   context "employee can bill time" do
-    it "redirects if input is invalid" do
+    it "renders timesheet view with error message if input is invalid" do
       post '/timesheets/create', {
         "username" => "",
         "date" => "2015/1/3",
@@ -99,39 +99,16 @@ describe 'LumberYard App' do
         "client" => ""
       }
       expect(last_request.path).to eq('/timesheets/create')
-      expect(last_response.status).to eq(302)
+      expect(last_response.status).to eq(200)
     end
 
-    it "displays success page if input is valid" do
+    it "displays timesheet view with success message if input is valid" do
         post '/timesheets/create', {
         "username" => "dsmith",
         "date" => "2015/1/15",
         "hours" => "3",
         "project_type" => "non-billable",
         "client" => ""
-      }
-      expect(last_response.status).to eq(200)
-    end
-
-    it "redirects if client input is invalid" do
-        post '/timesheets/create', {
-        "username" => "dsmith",
-        "date" => "2015/1/15",
-        "hours" => "3",
-        "project_type" => "billable",
-        "client" => ""
-      }
-      expect(last_request.path).to eq('/timesheets/create')
-      expect(last_response.status).to eq(302)
-    end
-
-    it "displays success page if client input is valid" do
-        post '/timesheets/create', {
-        "username" => "dsmith",
-        "date" => "2015/1/15",
-        "hours" => "3",
-        "project_type" => "billable",
-        "client" => "Allegra"
       }
       expect(last_response.status).to eq(200)
     end
