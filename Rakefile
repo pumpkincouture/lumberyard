@@ -9,7 +9,7 @@ task :run do
 end
 
 task :server do
-  system 'heroku run --app lumberyard-sinatra irb -I'
+  system 'heroku run --app lumberyard-sinatra-app irb -I'
 end
 
 #When running above, input load './lumber_yard.rb'
