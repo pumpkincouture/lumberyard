@@ -15,94 +15,105 @@ LumberYard::Timesheet.new
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
-get '/' do        # home page
+get '/' do
   @title = "LumberYard"
+  @message = ModelCitizen::Messages.new.get_message("username_prompt")
   erb :home
 end
 
-get '/billing' do     # combine with post /timesheets
+get '/timesheets/new' do
+  @options = ModelCitizen::Messages.new
   @clients = LumberYard::Client.new.get_all_clients
-  @message = "That is not a valid timesheet, please try again."
-  erb :billing
+  erb :'timesheets/new'
 end
 
-get '/add_employee' do   # combine with post /employees
-  @clients = LumberYard::Client.new.get_all_clients
-  @message = "That is not a valid employee, please try again."
-  erb :add_employee
+get '/report/new' do
+  @time_sheet = LumberYard::Timesheet.new.get_timesheet
+  erb :'report/new'
 end
 
-get '/add_client' do    # combine with post /clients
-  @message = "That is not a valid client, please try again."
-  erb :add_client
+get '/all_employee_report/new' do
+  @options = ModelCitizen::Messages.new
+  @time_sheet = LumberYard::Timesheet.new.get_timesheet
+  erb :'all_employee_report/new'
 end
 
-post '/username' do     # logged in home page vs logged out home page
+get '/client/new' do
+  @options = ModelCitizen::Messages.new
+  erb :'client/new'
+end
+
+get '/employee/new' do
+  @options = ModelCitizen::Messages.new
+  erb :'employee/new'
+end
+
+post '/username/validate' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
-    @message = "username_failure"
+    @message = ModelCitizen::Messages.new.get_message("invalid_username")
     erb :home
-  elsif LumberYard::Employee.new.admin?(params["username_name"])
-    @employee = LumberYard::Employee.new.get_employee(params["username_name"])
-    erb :admin_form
   else
+    @message = ModelCitizen::Messages.new.get_message("choose_action")
+    @options = ModelCitizen::Messages.new
     @employee = LumberYard::Employee.new.get_employee(params["username_name"])
-    erb :nonadmin_form
+    erb :index
   end
 end
 
-post '/selection' do    # multiple resource/new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet
+post '/timesheets/create' do
   @clients = LumberYard::Client.new.get_all_clients
-  choice = params["option"]
-  erb get_correct_form(choice)
-end
-
-post '/billing' do  # post '/timesheets'
-  @clients = LumberYard::Client.new.get_all_clients
-  until LumberYard::Timesheet.new.create_timesheet({
+  if !LumberYard::Timesheet.new.create_timesheet({
     username: params[:username],
     date: params[:date],
     hours: params[:hours],
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    redirect '/billing'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_timesheet")
+    erb :'timesheets/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("timesheet_success")
+    erb :'timesheets/form'
   end
-  @success = true
-  @message = "Your timesheet has been successfully saved."
-  erb :billing
 end
 
-post '/add_employee' do   # post '/employees'
+post '/employees/create' do
   @clients = LumberYard::Client.new.get_all_clients
-  until LumberYard::Employee.new.create_employee({
+  if !LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
     last_name: params[:last_name],
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    redirect '/add_employee'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_employee")
+    erb :'employee/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("employee_success")
+    erb :'employee/form'
   end
-  @success = true
-  @message = "Employee successfully added!"
-  erb :add_employee
 end
 
-post '/add_client' do # post '/clients'
-  until LumberYard::Client.new.create_client({
+post '/clients/create' do
+  if !LumberYard::Client.new.create_client({
     name: params[:name],
     type: params[:type]
     }).valid?
-    redirect '/add_client'
+    @options = ModelCitizen::Messages.new
+    @success = false
+    @message = ModelCitizen::Messages.new.get_message("invalid_client")
+    erb :'client/form'
+  else
+    @options = ModelCitizen::Messages.new
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message("client_success")
+    erb :'client/form'
   end
-  @success = true
-  @message = "Client successfully added!"
-  erb :add_client
-end
-
-private
-
-def get_correct_form(choice)
-    forms = ["billing", "time_report", "add_employee", "add_client", "employee_report"]
-    forms[choice.to_i - 1].to_sym
 end

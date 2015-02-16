@@ -1,8 +1,8 @@
 <section id="add">
-<form action="/add_client" method="post">
-  <p>Please enter client name.</p>
+<form action="/clients/create" method="post">
+  <p><%= @options.get_message("enter_client_name") %></p>
   <input type="textbox" name="name"></br>
-  <p>Please choose client type.</p>
+  <p><%= @options.get_message("enter_client_type") %></p>
     <p>Standard</p>
         <input type="radio" name="type" value="standard"/>
       <p>Other</p>
