@@ -7,6 +7,7 @@ gem 'model_citizen', '~> 0.0.5'
 group :production do
     gem "dm-postgres-adapter"
     gem "pg"
+    gem 'rspec', '3.1.0'
 end
 
 group :development, :test do
