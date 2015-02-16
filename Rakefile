@@ -1,15 +1,17 @@
-# RSpec::Core::RakeTask.new
+require "rspec/core/rake_task"
 
-# task :test => :spec
+RSpec::Core::RakeTask.new
 
-# task :run do
-#   system 'ruby ./lumber_yard.rb'
-# end
+task :test => :spec
 
-# task :server do
-#   system 'heroku run --app lumberyard-sinatra irb -I'
-# end
+task :run do
+  system 'ruby ./lumber_yard.rb'
+end
 
-# #When running above, input load './lumber_yard.rb'
+task :server do
+  system 'heroku run --app lumberyard-sinatra irb -I'
+end
 
-# task :default => :run
+#When running above, input load './lumber_yard.rb'
+
+task :default => :run
