@@ -1,1 +1,1 @@
-web: bundle exec ruby lumberyard.rb -p $PORT
+web: bundle exec ruby lumber_yard.rb -p $PORT
