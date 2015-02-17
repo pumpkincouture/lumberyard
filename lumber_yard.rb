@@ -17,17 +17,17 @@ DataMapper.auto_upgrade!
 
 get '/' do
   @title = "LumberYard"
-  @message = ModelCitizen::Messages.new.get_message("username_prompt")
+  @message = "Please enter your username to get started"
   erb :home
 end
 
 get '/timesheets/new' do
-  @options = ModelCitizen::Messages.new
   @clients = LumberYard::Client.new.get_all_clients
   erb :'timesheets/new'
 end
 
 get '/report/new' do
+  @options = ModelCitizen::Messages.new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet
   erb :'report/new'
 end
@@ -39,22 +39,19 @@ get '/all_employee_report/new' do
 end
 
 get '/client/new' do
-  @options = ModelCitizen::Messages.new
   erb :'client/new'
 end
 
 get '/employee/new' do
-  @options = ModelCitizen::Messages.new
   erb :'employee/new'
 end
 
 post '/username/validate' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
-    @message = ModelCitizen::Messages.new.get_message("invalid_username")
+    @message = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
   else
-    @message = ModelCitizen::Messages.new.get_message("choose_action")
-    @options = ModelCitizen::Messages.new
+    @message = "Please select what you'd like to do"
     @employee = LumberYard::Employee.new.get_employee(params["username_name"])
     erb :index
   end
@@ -71,12 +68,12 @@ post '/timesheets/create' do
     }).valid?
     @options = ModelCitizen::Messages.new
     @success = false
-    @message = ModelCitizen::Messages.new.get_message("invalid_timesheet")
+    @message = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
     erb :'timesheets/form'
   else
     @options = ModelCitizen::Messages.new
     @success = true
-    @message = ModelCitizen::Messages.new.get_message("timesheet_success")
+    @message = ModelCitizen::Messages.new.get_message(:timesheet_success)
     erb :'timesheets/form'
   end
 end
@@ -91,12 +88,12 @@ post '/employees/create' do
     }).valid?
     @options = ModelCitizen::Messages.new
     @success = false
-    @message = ModelCitizen::Messages.new.get_message("invalid_employee")
+    @message = ModelCitizen::Messages.new.get_message(:invalid_employee)
     erb :'employee/form'
   else
     @options = ModelCitizen::Messages.new
     @success = true
-    @message = ModelCitizen::Messages.new.get_message("employee_success")
+    @message = ModelCitizen::Messages.new.get_message(:employee_success)
     erb :'employee/form'
   end
 end
@@ -108,12 +105,12 @@ post '/clients/create' do
     }).valid?
     @options = ModelCitizen::Messages.new
     @success = false
-    @message = ModelCitizen::Messages.new.get_message("invalid_client")
+    @message = ModelCitizen::Messages.new.get_message(:invalid_client)
     erb :'client/form'
   else
     @options = ModelCitizen::Messages.new
     @success = true
-    @message = ModelCitizen::Messages.new.get_message("client_success")
+    @message = ModelCitizen::Messages.new.get_message(:client_success)
     erb :'client/form'
   end
 end

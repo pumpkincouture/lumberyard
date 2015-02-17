@@ -6,34 +6,20 @@
   <section id="add">
     <form method="" action="/selection">
       <% if @employee.employee_type == 'admin' %>
-        <a href = '/timesheets/new'>
-          <%= @options.get_message("log_time")%>
-        </a>
+        <a href = '/timesheets/new'>Log time</a>
         </br>
-        <a href = '/report/new'>
-          <%= @options.get_message("request_report")%>
-        </a>
+        <a href = '/report/new'>Request report</a>
          </br>
-        <a href= '/employee/new'>
-          <%= @options.get_message("add_employee")%>
-        </a>
+        <a href= '/employee/new'>Add employee</a>
          </br>
-        <a href = '/client/new'>
-          <%= @options.get_message("add_client")%>
-        </a>
+        <a href = '/client/new'>Add client</a>
          </br>
-        <a href = '/all_employee_report/new'>
-          <%= @options.get_message("request_employee_report")%>
-        </a>
+        <a href = '/all_employee_report/new'>Request employee report</a>
         </br>
       <% else %>
-        <a href = '/timesheets/new'>
-          <%= @options.get_message("log_time")%>
-        </a>
+        <a href = '/timesheets/new'>Log time</a>
          </br>
-        <a href = '/report/new'>
-          <%= @options.get_message("request_report")%>
-        </a>
+        <a href = '/report/new'>Request report</a>
         </br>
       <% end %>
     </form>

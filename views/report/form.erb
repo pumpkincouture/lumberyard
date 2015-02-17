@@ -1,6 +1,6 @@
 <article class="welcome" >
   <% if @time_sheet.empty? %>
-  <p>No time to display for this month.</p>
+  <p><%= @options.get_message(:no_time_to_display) %></p>
    <% end %>
     <% @time_sheet.each do |timesheet| %>
       <p>Username: <%= timesheet.username %></p>

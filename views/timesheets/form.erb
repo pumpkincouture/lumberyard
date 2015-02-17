@@ -1,19 +1,19 @@
 <section id="add">
 <form action="/timesheets/create" method="post">
-  <p><%= @options.get_message("username_prompt") %></p>
+  <p>Please input your username</p>
   <input type="textbox" name="username"></br>
-  <p><%= @options.get_message("enter_date") %></p>
+  <p>Please input the project date using this format : YYYY/MM/DD</p>
   <input type="textbox" name="date"></br>
-  <p><%= @options.get_message("enter_hours") %></p>
+  <p>Please input hours worked</p>
     <input type="textbox" name="hours"></br>
-  <p><%= @options.get_message("enter_billing_type") %></p>
+  <p>Please choose a project type</p>
       <p>PTO</p>
         <input type="radio" name="project_type" value="pto"/>
       <p>Billable</p>
         <input type="radio" name="project_type" value="billable"/>
       <p>Non-Billable</p>
         <input type="radio" name="project_type" value="non-billable" /></br>
-  <p><%= @options.get_message("enter_client_name") %></p>
+  <p>Please enter client if project is billable</p>
   <select class="client_options">b
      <% @clients.each do |client| %>
       <option name ="client" value=<%= client.name %>><%= client.name %></option>
