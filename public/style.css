@@ -10,6 +10,10 @@ header {
     margin: 10px 0 20px;
 }
 
+.error h2 {
+    color:red;
+}
+
 header h1 {
     display: inline;
     color: midnightblue;

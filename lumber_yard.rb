@@ -1,10 +1,15 @@
 require 'sinatra'
+require 'rack-flash'
+require 'sinatra/redirect_with_flash'
 
 require_relative 'lib/client.rb'
 require_relative 'lib/employee.rb'
 require_relative 'lib/timesheet.rb'
 
 include LumberYard
+
+enable :sessions
+use Rack::Flash
 
 DataMapper.setup(:default, ENV["DATABASE_URL"] || "sqlite3://#{Dir.pwd}/time_logger.db")
 
@@ -17,7 +22,6 @@ DataMapper.auto_upgrade!
 
 get '/' do
   @title = "LumberYard"
-  @message = "Please enter your username to get started"
   erb :home
 end
 
@@ -26,16 +30,16 @@ get '/timesheets/new' do
   erb :'timesheets/new'
 end
 
-get '/report/new' do
+get '/report/show' do
   @options = ModelCitizen::Messages.new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet
-  erb :'report/new'
+  erb :'report/show'
 end
 
-get '/all_employee_report/new' do
+get '/all_employee_report/show' do
   @options = ModelCitizen::Messages.new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet
-  erb :'all_employee_report/new'
+  erb :'all_employee_report/show'
 end
 
 get '/client/new' do
@@ -46,13 +50,16 @@ get '/employee/new' do
   erb :'employee/new'
 end
 
+get '/home/index' do
+  erb :index
+end
+
 post '/username/validate' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
-    @message = ModelCitizen::Messages.new.get_message(:invalid_username)
+    flash[:username_error] = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
   else
-    @message = "Please select what you'd like to do"
-    @employee = LumberYard::Employee.new.get_employee(params["username_name"])
+    session[:employee] = LumberYard::Employee.new.get_employee(params["username_name"])
     erb :index
   end
 end
@@ -60,21 +67,17 @@ end
 post '/timesheets/create' do
   @clients = LumberYard::Client.new.get_all_clients
   if !LumberYard::Timesheet.new.create_timesheet({
-    username: params[:username],
+    username: session[:employee].username,
     date: params[:date],
     hours: params[:hours],
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
-    erb :'timesheets/form'
+    flash[:timesheet_error] = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
+    redirect '/timesheets/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:timesheet_success)
-    erb :'timesheets/form'
+    flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
+    redirect '/home/index'
   end
 end
 
@@ -86,15 +89,11 @@ post '/employees/create' do
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_employee)
-    erb :'employee/form'
+    flash[:employee_error] = ModelCitizen::Messages.new.get_message(:invalid_employee)
+    redirect '/employee/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:employee_success)
-    erb :'employee/form'
+    flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
+    redirect '/home/index'
   end
 end
 
@@ -103,14 +102,10 @@ post '/clients/create' do
     name: params[:name],
     type: params[:type]
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_client)
-    erb :'client/form'
+    flash[:client_error] = ModelCitizen::Messages.new.get_message(:invalid_client)
+    redirect '/client/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:client_success)
-    erb :'client/form'
+    flash[:client_success] = ModelCitizen::Messages.new.get_message(:client_success)
+    redirect '/home/index'
   end
 end

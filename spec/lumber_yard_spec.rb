@@ -50,59 +50,60 @@ describe 'LumberYard App' do
   end
 
   context "admin employee can add employee" do
-    it "renders employee page with error message if input is invalid" do
+    it "directs back to employee/new page with error message if input is invalid" do
       post '/employees/create', {
         "first_name" => nil,
         "last_name" => "Olak",
         "username" => "solak",
         "employee_type" => 'non-admin'}
       expect(last_request.path).to eq('/employees/create')
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
 
-    it "renders employee page with success message if input is valid" do
+    it "redirects to home page with success message if input is valid" do
       post '/employees/create', {
         "first_name" => "Sylwia",
         "last_name" => "Olak",
         "username" => "solak",
         "employee_type" => 'non-admin'}
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
   end
 
   context "admin employee can add client" do
-    it "renders client page with error message if input is invalid" do
+    it "redirects back to client/new page with error message if input is invalid" do
       post '/clients/create', {
         "name" => nil,
         "type" => "Standard"
         }
       expect(last_request.path).to eq('/clients/create')
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
 
-    it "renders client page with success message if input is valid" do
+    it "redirects to home page with success message if input is valid" do
        post '/clients/create', {
         "name" => "Allegra",
         "type" => "Standard"
         }
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
   end
 
   context "employee can bill time" do
-    it "renders timesheet view with error message if input is invalid" do
+    it "redirects back to employee/new page with error message if input is invalid" do
+      @employee = rack_mock_session.cookie_jar[:employee] = "dsmith"
       post '/timesheets/create', {
-        "username" => "",
+        "username" => @employee,
         "date" => "2015/1/3",
         "hours" => "",
         "project_type" => "non-billable",
         "client" => ""
       }
       expect(last_request.path).to eq('/timesheets/create')
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
 
-    it "displays timesheet view with success message if input is valid" do
+    it "redirects to home page with success message if input is valid" do
         post '/timesheets/create', {
         "username" => "dsmith",
         "date" => "2015/1/15",
@@ -110,7 +111,7 @@ describe 'LumberYard App' do
         "project_type" => "non-billable",
         "client" => ""
       }
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
   end
 end

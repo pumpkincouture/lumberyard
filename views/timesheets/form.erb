@@ -1,7 +1,5 @@
 <section id="add">
 <form action="/timesheets/create" method="post">
-  <p>Please input your username</p>
-  <input type="textbox" name="username"></br>
   <p>Please input the project date using this format : YYYY/MM/DD</p>
   <input type="textbox" name="date"></br>
   <p>Please input hours worked</p>
@@ -20,10 +18,9 @@
     <% end %>
   </select></br>
   <input type="submit" class="submit-button">
-  <% if @success == true %>
-    <h3 class ="client_success"> <%= @message %></h3>
-  <% else %>
-    <h3 class ="client_success"> <%= @message %></h3>
+   <% if flash[:timesheet_error] %>
+     <h2 class="error"><%= flash[:timesheet_error] %></h2>
   <% end %>
+   <a href = '/home/index' >Home</a>
 </form>
 </section>

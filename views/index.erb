@@ -1,26 +1,37 @@
   <article class="welcome" >
-    <p>Welcome, <%= @employee.first_name %></p>
-    <p><%= @message %></p>
+    <% if session[:employee] %>
+       <p>Welcome, <%=session[:employee].first_name %></p>
+    <% end %>
+    <p>Please select what you'd like to do</p>
   </article>
   </br>
   <section id="add">
     <form method="" action="/selection">
-      <% if @employee.employee_type == 'admin' %>
+      <% if session[:employee].employee_type == 'admin' %>
         <a href = '/timesheets/new'>Log time</a>
         </br>
-        <a href = '/report/new'>Request report</a>
+        <a href = '/report/show'>Request report</a>
          </br>
         <a href= '/employee/new'>Add employee</a>
          </br>
         <a href = '/client/new'>Add client</a>
          </br>
-        <a href = '/all_employee_report/new'>Request employee report</a>
+        <a href = '/all_employee_report/show'>Request employee report</a>
         </br>
       <% else %>
         <a href = '/timesheets/new'>Log time</a>
          </br>
-        <a href = '/report/new'>Request report</a>
+        <a href = '/report/show'>Request report</a>
         </br>
+      <% end %>
+        <% if flash[:employee_success] %>
+          <h2 class="notice"><%= flash[:employee_success] %></h2>
+        <% end %>
+        <% if flash[:timesheet_success] %>
+          <h2 class="notice"><%= flash[:timesheet_success] %></h2>
+        <% end %>
+        <% if flash[:client_success] %>
+          <h2 class="notice"><%= flash[:client_success] %></h2>
       <% end %>
     </form>
   </section>
