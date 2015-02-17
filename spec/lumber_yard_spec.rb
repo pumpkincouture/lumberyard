@@ -90,15 +90,19 @@ describe 'LumberYard App' do
   end
 
   context "employee can bill time" do
+    before :each do
+      rack_mock_session.cookie_jar[:employee] = "dsmith"
+    end
+
     it "redirects back to employee/new page with error message if input is invalid" do
-      @employee = rack_mock_session.cookie_jar[:employee] = "dsmith"
+      rack_mock_session.cookie_jar[:employee] = "dsmith"
       post '/timesheets/create', {
-        "username" => @employee,
+        "username" => :employee,
         "date" => "2015/1/3",
         "hours" => "",
         "project_type" => "non-billable",
-        "client" => ""
-      }
+        "client" => ""}
+
       expect(last_request.path).to eq('/timesheets/create')
       expect(last_response.status).to eq(302)
     end
