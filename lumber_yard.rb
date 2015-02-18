@@ -51,6 +51,8 @@ get '/employee/new' do
 end
 
 get '/home/index' do
+  @success = true
+  @message = ModelCitizen::Messages.new.get_message(:employee_success)
   erb :index
 end
 
@@ -76,7 +78,9 @@ post '/timesheets/create' do
     flash[:timesheet_error] = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
     redirect '/timesheets/new'
   else
-    flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message(:timesheet_success)
+    # flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
     redirect '/home/index'
   end
 end
@@ -92,7 +96,9 @@ post '/employees/create' do
     flash[:employee_error] = ModelCitizen::Messages.new.get_message(:invalid_employee)
     redirect '/employee/new'
   else
-    flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
+    @success = true
+    @message = ModelCitizen::Messages.new.get_message(:employee_success)
+    # flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
     redirect '/home/index'
   end
 end
