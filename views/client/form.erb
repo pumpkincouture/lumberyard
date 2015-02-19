@@ -3,6 +3,7 @@
   <p>Please enter client name</p>
   <input type="textbox" name="name"></br>
   <p>Please enter client type</p>
+  </br>
     <p>Standard</p>
         <input type="radio" name="type" value="standard"/>
       <p>Other</p>
@@ -11,6 +12,7 @@
    <% if flash[:client_error] %>
      <h2 class="error"><%= flash[:client_error] %></h2>
   <% end %>
-  <a href = '/home/index' >Home</a>
+    </br>
+  <a href = '/home/index' class = "back">Home</a>
 </form>
 </section>

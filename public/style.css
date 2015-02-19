@@ -12,6 +12,7 @@ header {
 
 .error {
     color:red;
+    margin-left: 150px;
 }
 
 .notice {
@@ -32,7 +33,7 @@ header h1 a:link, header h1 a:visited {
 
 .username_prompt {
     font-size: 15px;
-    margin-left: 130px;
+    margin-left: 163px;
     color: slategray;
     padding-bottom: 15px;
 }
@@ -67,7 +68,6 @@ header h1 a:link, header h1 a:visited {
     background: white;
 }
 
-
 #add input[type=submit] {
     height: 35px;
     width: 85px;
@@ -77,6 +77,18 @@ header h1 a:link, header h1 a:visited {
     border-radius: 20px;
     margin-left: 260px;
     margin-top: 20px;
+}
+
+.back {
+    color: darkblue;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+#add a {
+    color: darkblue;
+    text-decoration: none;
+    font-size: 12px;
 }
 
 .clients option {

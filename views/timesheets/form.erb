@@ -5,6 +5,7 @@
   <p>Please input hours worked</p>
     <input type="textbox" name="hours"></br>
   <p>Please choose a project type</p>
+  </br>
       <p>PTO</p>
         <input type="radio" name="project_type" value="pto"/>
       <p>Billable</p>
@@ -21,6 +22,7 @@
    <% if flash[:timesheet_error] %>
      <h2 class="error"><%= flash[:timesheet_error] %></h2>
   <% end %>
-   <a href = '/home/index' >Home</a>
+  </br>
+   <a href = '/home/index' class = "back">Home</a>
 </form>
 </section>
