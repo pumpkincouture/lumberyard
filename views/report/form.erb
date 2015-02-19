@@ -3,10 +3,10 @@
   <p><%= @options.get_message(:no_time_to_display) %></p>
    <% end %>
     <% @time_sheet.each do |timesheet| %>
-      <p>Username: <%= timesheet.username %></p>
-      <p>Project date: <%= timesheet.year %>-<%= timesheet.month %>-<%= timesheet.day %> </p>
-      <p>Hours: <%= timesheet.hours %> hours</p>
-      <p>Project: <%= timesheet.project_type %></p>
+      <p>Username: <%= timesheet.username %> || Project date: <%= timesheet.date %> </p>
+      <p>Hours: <%= timesheet.hours %> hours || Project: <%= timesheet.project_type %></p>
+       <br>
   <% end %>
+  <br>
    <a href = '/home/index' >Home</a>
 </article>

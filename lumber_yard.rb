@@ -32,13 +32,13 @@ end
 
 get '/report/show' do
   @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet
+  @time_sheet = LumberYard::Timesheet.new.get_timesheet_for_employee(LumberYard::Timesheet.new.get_this_month, session[:employee_username])
   erb :'report/show'
 end
 
 get '/all_employee_report/show' do
   @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet
+  @time_sheet = LumberYard::Timesheet.new.get_timesheet(LumberYard::Timesheet.new.get_this_month)
   erb :'all_employee_report/show'
 end
 

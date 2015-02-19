@@ -230,9 +230,57 @@ describe Timesheet do
   end
 
   context "finding timesheets in the database" do
-    it "finds all the timesheets in the database" do
+    it "finds a timesheet for the month of February for username egold" do
       @timesheet = Timesheet.new
-      expect(@timesheet.get_timesheet.count).to eq(0)
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/3",
+        :hours => "5",
+        :project_type => "non-billable",
+        :client => ""
+      )
+
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/1/3",
+        :hours => "8",
+        :project_type => "pto",
+        :client => ""
+      )
+      expect(@timesheet.get_timesheet_for_employee("2", "egold")[0].date).to eq("2015/2/3")
+    end
+
+
+    it "finds all timesheets for month of February" do
+      @timesheet = Timesheet.new
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/3",
+        :hours => "8",
+        :project_type => "pto",
+        :client => ""
+      )
+
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/10",
+        :hours => "2",
+        :project_type => "non-billable",
+        :client => ""
+      )
+      expect(@timesheet.get_timesheet("2")[0].date).to eq("2015/2/3")
+    end
+
+    it "finds no timesheets for the month of February" do
+      @timesheet = Timesheet.new
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/3/10",
+        :hours => "2",
+        :project_type => "non-billable",
+        :client => ""
+      )
+      expect(@timesheet.get_timesheet("2")[0]).to eq(nil)
     end
   end
 end

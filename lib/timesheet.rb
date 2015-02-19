@@ -35,8 +35,16 @@ module LumberYard
         )
     end
 
-    def get_timesheet
-       get_timesheet_from_database
+    def get_this_month
+      model_citizen.get_this_month
+    end
+
+    def get_timesheet(month)
+       get_timesheet_from_database(month)
+    end
+
+    def get_timesheet_for_employee(month, employee)
+      get_timesheet_from_database_with_employee(month, employee)
     end
 
     private
@@ -69,12 +77,16 @@ module LumberYard
       model_citizen.valid_date?(date)
     end
 
-    def get_this_month
-      model_citizen.get_this_month
+    def get_timesheet_from_database_with_employee(month, employee)
+      Timesheet.find_all{|entry| y, m, d = entry.date.split '/'
+        m == month && entry.username == employee
+      }
     end
 
-    def get_timesheet_from_database
-      Timesheet.all(:date => get_this_month)
+    def get_timesheet_from_database(month)
+      Timesheet.find_all{|entry| y, m, d = entry.date.split '/'
+        m == month
+      }
     end
   end
 end
