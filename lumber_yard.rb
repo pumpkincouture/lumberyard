@@ -67,7 +67,7 @@ end
 
 post '/timesheets/create' do
   @clients = LumberYard::Client.new.get_all_clients
-  p  params[:client]
+
   if !LumberYard::Timesheet.new.create_timesheet({
     username: session[:employee_username],
     date: params[:date],
@@ -130,8 +130,4 @@ end
 
 def set_type_session(employee)
     session[:employee_type] = employee.employee_type
-end
-
-def current_user
-  @current_user ||= Employee.new.get_employee(:username => session[:employee])
 end

@@ -140,6 +140,16 @@ describe Timesheet do
       expect(timesheet.valid?).to eq(true)
      end
 
+    it "pto project with client is invalid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "pto",
+        :client => "Kraft"
+        )
+      expect(timesheet.valid?).to eq(false)
+     end
 
     it "non-billable project with empty client is valid" do
       timesheet = Timesheet.create(
@@ -150,6 +160,17 @@ describe Timesheet do
         :client => ""
         )
       expect(timesheet.valid?).to eq(true)
+     end
+
+    it "non-billable project with client is invalid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "non-billable",
+        :client => "Sunkist"
+        )
+      expect(timesheet.valid?).to eq(false)
      end
 
     it "missing a project type is not valid" do

@@ -47,7 +47,7 @@ module LumberYard
     end
 
     def client_valid?
-      unless client_field_still_na? || client_field_still_invalid?
+      unless client_field_still_na? || client_field_still_invalid? || project_not_billable?
         return true
       end
       false
@@ -55,6 +55,10 @@ module LumberYard
 
     def client_field_still_na?
       model_citizen.value_included?('billable', 'Billable', project_type) && client == "NA"
+    end
+
+    def project_not_billable?
+      !model_citizen.value_included?('billable', 'Billable', project_type) && client != ""
     end
 
     def client_field_still_invalid?
