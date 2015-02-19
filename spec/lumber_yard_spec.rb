@@ -107,8 +107,6 @@ describe 'LumberYard App' do
       expect(last_response.status).to eq(302)
     end
 
-
-
     it "redirects to home page with success message if input is valid" do
         employee_username = current_session.rack_session[:employee_username] = "dsmith"
         post '/timesheets/create', {
