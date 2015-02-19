@@ -78,15 +78,19 @@ module LumberYard
     end
 
     def get_timesheet_from_database_with_employee(month, employee)
-      Timesheet.find_all{|entry| y, m, d = entry.date.split '/'
+      Timesheet.find_all{|entry| y, m, d = split_date(entry.date)
         m == month && entry.username == employee
       }
     end
 
     def get_timesheet_from_database(month)
-      Timesheet.find_all{|entry| y, m, d = entry.date.split '/'
+      Timesheet.find_all{|entry| y, m, d = split_date(entry.date)
         m == month
       }
+    end
+
+    def split_date(date)
+       date.split '/'
     end
   end
 end
