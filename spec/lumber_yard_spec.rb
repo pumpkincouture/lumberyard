@@ -95,9 +95,9 @@ describe 'LumberYard App' do
     end
 
     it "redirects back to employee/new page with error message if input is invalid" do
-      rack_mock_session.cookie_jar[:employee] = "dsmith"
+      employee_username = current_session.rack_session[:employee_username] = "dsmith"
       post '/timesheets/create', {
-        "username" => :employee,
+        "username" => employee_username,
         "date" => "2015/1/3",
         "hours" => "",
         "project_type" => "non-billable",
@@ -107,9 +107,12 @@ describe 'LumberYard App' do
       expect(last_response.status).to eq(302)
     end
 
+
+
     it "redirects to home page with success message if input is valid" do
+        employee_username = current_session.rack_session[:employee_username] = "dsmith"
         post '/timesheets/create', {
-        "username" => "dsmith",
+        "username" => employee_username,
         "date" => "2015/1/15",
         "hours" => "3",
         "project_type" => "non-billable",

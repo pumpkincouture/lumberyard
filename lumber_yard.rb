@@ -51,8 +51,6 @@ get '/employee/new' do
 end
 
 get '/home/index' do
-  @success = true
-  @message = ModelCitizen::Messages.new.get_message(:employee_success)
   erb :index
 end
 
@@ -61,15 +59,17 @@ post '/username/validate' do
     flash[:username_error] = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
   else
-    session[:employee] = LumberYard::Employee.new.get_employee(params["username_name"])
+    employee = LumberYard::Employee.new.get_employee(params["username_name"])
+    set_session_data(employee)
     erb :index
   end
 end
 
 post '/timesheets/create' do
   @clients = LumberYard::Client.new.get_all_clients
+  p  params[:client]
   if !LumberYard::Timesheet.new.create_timesheet({
-    username: session[:employee].username,
+    username: session[:employee_username],
     date: params[:date],
     hours: params[:hours],
     project_type: params[:project_type],
@@ -78,9 +78,7 @@ post '/timesheets/create' do
     flash[:timesheet_error] = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
     redirect '/timesheets/new'
   else
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:timesheet_success)
-    # flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
+    flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
     redirect '/home/index'
   end
 end
@@ -96,9 +94,7 @@ post '/employees/create' do
     flash[:employee_error] = ModelCitizen::Messages.new.get_message(:invalid_employee)
     redirect '/employee/new'
   else
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:employee_success)
-    # flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
+    flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
     redirect '/home/index'
   end
 end
@@ -114,4 +110,28 @@ post '/clients/create' do
     flash[:client_success] = ModelCitizen::Messages.new.get_message(:client_success)
     redirect '/home/index'
   end
+end
+
+def set_session_data(employee)
+  set_username_session(employee)
+  set_first_name_session(employee)
+  set_type_session(employee)
+end
+
+private
+
+def set_username_session(employee)
+  session[:employee_username] = employee.username
+end
+
+def set_first_name_session(employee)
+  session[:employee_first_name] = employee.first_name
+end
+
+def set_type_session(employee)
+    session[:employee_type] = employee.employee_type
+end
+
+def current_user
+  @current_user ||= Employee.new.get_employee(:username => session[:employee])
 end

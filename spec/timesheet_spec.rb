@@ -96,6 +96,17 @@ describe Timesheet do
       expect(timesheet.valid?).to eq(true)
     end
 
+    it "Billable type can only have valid client" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "Billable",
+        :client => "United"
+        )
+      expect(timesheet.valid?).to eq(true)
+    end
+
     it "billable type with empty client is not valid" do
       timesheet = Timesheet.create(
         :username => "solak",
@@ -118,14 +129,27 @@ describe Timesheet do
       expect(timesheet.valid?).to eq(false)
     end
 
-    it "if billable type with no client, is invalid" do
+    it "pto project with empty client is valid" do
       timesheet = Timesheet.create(
         :username => "solak",
         :date => "2015/1/13",
         :hours => "6",
-        :project_type => "billable"
+        :project_type => "pto",
+        :client => ""
         )
-         expect(timesheet.valid?).to eq(false)
+      expect(timesheet.valid?).to eq(true)
+     end
+
+
+    it "non-billable project with empty client is valid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "non-billable",
+        :client => ""
+        )
+      expect(timesheet.valid?).to eq(true)
      end
 
     it "missing a project type is not valid" do
