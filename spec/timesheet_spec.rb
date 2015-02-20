@@ -247,7 +247,7 @@ describe Timesheet do
         :project_type => "pto",
         :client => ""
       )
-      expect(@timesheet.get_timesheet_for_employee("2", "egold")[0].date).to eq("2015/2/3")
+      expect(@timesheet.current_month_employee_timesheet("2", "egold")[0].date).to eq("2015/2/3")
     end
 
 
@@ -268,7 +268,7 @@ describe Timesheet do
         :project_type => "non-billable",
         :client => ""
       )
-      expect(@timesheet.get_timesheet("2")[0].date).to eq("2015/2/3")
+      expect(@timesheet.current_month_timesheet("2")[0].date).to eq("2015/2/3")
     end
 
     it "finds no timesheets for the month of February" do
@@ -280,7 +280,7 @@ describe Timesheet do
         :project_type => "non-billable",
         :client => ""
       )
-      expect(@timesheet.get_timesheet("2")[0]).to eq(nil)
+      expect(@timesheet.current_month_timesheet("2")[0]).to eq(nil)
     end
   end
 end

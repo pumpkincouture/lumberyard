@@ -31,7 +31,7 @@ module LumberYard
       model_citizen = ModelCitizen::Validations.new
     end
 
-    def get_employee(params)
+    def find_employee(params)
       search_for_employee(params)
     end
 

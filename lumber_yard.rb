@@ -27,18 +27,18 @@ end
 
 get '/report' do
   @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet_for_employee(LumberYard::Timesheet.new.get_this_month, session[:employee_username])
+  @time_sheet = LumberYard::Timesheet.new.current_month_employee_timesheet(LumberYard::Timesheet.new.current_month, session[:employee_username])
   erb :'report/show'
 end
 
-get '/all_employee_report' do
+get '/reports/all_employees' do
   @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet(LumberYard::Timesheet.new.get_this_month)
+  @time_sheet = LumberYard::Timesheet.new.current_month_timesheet(LumberYard::Timesheet.new.current_month)
   erb :'all_employee_report/show'
 end
 
 get '/timesheets/new' do
-  @clients = LumberYard::Client.new.get_all_clients
+  @clients = LumberYard::Client.new.find_clients
   erb :'timesheets/new'
 end
 
@@ -50,7 +50,7 @@ get '/employees/new' do
   erb :'employee/new'
 end
 
-get '/home/index' do
+get '/login' do
   erb :index
 end
 
@@ -59,14 +59,14 @@ post '/username' do
     flash[:username_error] = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
   else
-    employee = LumberYard::Employee.new.get_employee(params["username_name"])
+    employee = LumberYard::Employee.new.find_employee(params["username_name"])
     set_session_data(employee)
-    redirect '/home/index'
+    redirect '/login'
   end
 end
 
 post '/timesheets' do
-  @clients = LumberYard::Client.new.get_all_clients
+  @clients = LumberYard::Client.new.find_clients
 
   if !LumberYard::Timesheet.new.create_timesheet({
     username: session[:employee_username],
@@ -79,12 +79,12 @@ post '/timesheets' do
     redirect '/timesheets/new'
   else
     flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
-    redirect '/home/index'
+    redirect '/login'
   end
 end
 
 post '/employees' do
-  @clients = LumberYard::Client.new.get_all_clients
+  @clients = LumberYard::Client.new.find_clients
   if !LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
     last_name: params[:last_name],
@@ -95,7 +95,7 @@ post '/employees' do
     redirect '/employees/new'
   else
     flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
-    redirect '/home/index'
+    redirect '/login'
   end
 end
 
@@ -108,26 +108,12 @@ post '/clients' do
     redirect '/clients/new'
   else
     flash[:client_success] = ModelCitizen::Messages.new.get_message(:client_success)
-    redirect '/home/index'
+    redirect '/login'
   end
 end
 
 def set_session_data(employee)
-  set_username_session(employee)
-  set_first_name_session(employee)
-  set_type_session(employee)
-end
-
-private
-
-def set_username_session(employee)
-  session[:employee_username] = employee.username
-end
-
-def set_first_name_session(employee)
   session[:employee_first_name] = employee.first_name
-end
-
-def set_type_session(employee)
-    session[:employee_type] = employee.employee_type
+  session[:employee_username] = employee.username
+  session[:employee_type] = employee.employee_type
 end
