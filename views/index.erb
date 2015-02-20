@@ -10,13 +10,13 @@
       <% if session[:employee_type] == 'admin' %>
         <a href = '/timesheets/new'>Log time</a>
         </br>
-        <a href = '/report/show'>Request report</a>
+        <a href = '/report'>Request report</a>
          </br>
-        <a href= '/employee/new'>Add employee</a>
+        <a href= '/employees/new'>Add employee</a>
          </br>
-        <a href = '/client/new'>Add client</a>
+        <a href = '/clients/new'>Add client</a>
          </br>
-        <a href = '/all_employee_report/show'>Request employee report</a>
+        <a href = '/all_employee_report'>Request employee report</a>
         </br>
       <% else %>
         <a href = '/timesheets/new'>Log time</a>

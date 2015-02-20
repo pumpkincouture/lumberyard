@@ -25,28 +25,28 @@ get '/' do
   erb :home
 end
 
-get '/timesheets/new' do
-  @clients = LumberYard::Client.new.get_all_clients
-  erb :'timesheets/new'
-end
-
-get '/report/show' do
+get '/report' do
   @options = ModelCitizen::Messages.new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet_for_employee(LumberYard::Timesheet.new.get_this_month, session[:employee_username])
   erb :'report/show'
 end
 
-get '/all_employee_report/show' do
+get '/all_employee_report' do
   @options = ModelCitizen::Messages.new
   @time_sheet = LumberYard::Timesheet.new.get_timesheet(LumberYard::Timesheet.new.get_this_month)
   erb :'all_employee_report/show'
 end
 
-get '/client/new' do
+get '/timesheets/new' do
+  @clients = LumberYard::Client.new.get_all_clients
+  erb :'timesheets/new'
+end
+
+get '/clients/new' do
   erb :'client/new'
 end
 
-get '/employee/new' do
+get '/employees/new' do
   erb :'employee/new'
 end
 
@@ -54,7 +54,7 @@ get '/home/index' do
   erb :index
 end
 
-post '/username/validate' do
+post '/username' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
     flash[:username_error] = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
@@ -65,7 +65,7 @@ post '/username/validate' do
   end
 end
 
-post '/timesheets/create' do
+post '/timesheets' do
   @clients = LumberYard::Client.new.get_all_clients
 
   if !LumberYard::Timesheet.new.create_timesheet({
@@ -83,7 +83,7 @@ post '/timesheets/create' do
   end
 end
 
-post '/employees/create' do
+post '/employees' do
   @clients = LumberYard::Client.new.get_all_clients
   if !LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
@@ -92,20 +92,20 @@ post '/employees/create' do
     employee_type: params[:employee_type],
     }).valid?
     flash[:employee_error] = ModelCitizen::Messages.new.get_message(:invalid_employee)
-    redirect '/employee/new'
+    redirect '/employees/new'
   else
     flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
     redirect '/home/index'
   end
 end
 
-post '/clients/create' do
+post '/clients' do
   if !LumberYard::Client.new.create_client({
     name: params[:name],
     type: params[:type]
     }).valid?
     flash[:client_error] = ModelCitizen::Messages.new.get_message(:invalid_client)
-    redirect '/client/new'
+    redirect '/clients/new'
   else
     flash[:client_success] = ModelCitizen::Messages.new.get_message(:client_success)
     redirect '/home/index'

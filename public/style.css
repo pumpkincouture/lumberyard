@@ -79,16 +79,16 @@ header h1 a:link, header h1 a:visited {
     margin-top: 20px;
 }
 
+#add a {
+    color: darkblue;
+    text-decoration: none;
+    font-size: 14px;
+}
+
 .back {
     color: darkblue;
     font-size: 20px;
     text-decoration: none;
-}
-
-#add a {
-    color: darkblue;
-    text-decoration: none;
-    font-size: 12px;
 }
 
 .clients option {
