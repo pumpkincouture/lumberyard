@@ -18,8 +18,8 @@ module LumberYard
       model_citizen = ModelCitizen::Validations.new
     end
 
-    def get_all_clients
-      get_all_clients_from_database
+    def find_clients
+      find_clients_in_database
     end
 
    def create_client(attributes)
@@ -35,7 +35,7 @@ module LumberYard
       model_citizen.not_nil_or_empty?([name, type])
     end
 
-    def get_all_clients_from_database
+    def find_clients_in_database
       Client.all
     end
   end

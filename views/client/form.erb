@@ -1,17 +1,20 @@
 <section id="add">
-<form action="/clients/create" method="post">
+<form action="/clients" method="post">
   <p>Please enter client name</p>
   <input type="textbox" name="name"></br>
   <p>Please enter client type</p>
+  </br>
     <p>Standard</p>
         <input type="radio" name="type" value="standard"/>
       <p>Other</p>
         <input type="radio" name="type" value="other"/></br>
   <input type="submit" class="submit-button">
-  <% if @success == true %>
-    <h3 class ="client_success"> <%= @message %></h3>
-  <% else %>
-    <h3 class ="client_success"> <%= @message %></h3>
+  </br>
+   <% if flash[:client_error] %>
+     <h2 class="error"><%= flash[:client_error] %></h2>
   <% end %>
+    </br>
+  </br>
+  <a href = '/login' class = "back">Home</a>
 </form>
 </section>

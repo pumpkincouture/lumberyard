@@ -35,8 +35,16 @@ module LumberYard
         )
     end
 
-    def get_timesheet
-       get_timesheet_from_database
+    def current_month
+      model_citizen.get_this_month
+    end
+
+    def current_month_timesheet(month)
+       find_timesheet(month)
+    end
+
+    def current_month_employee_timesheet(month, employee)
+      find_employee_timesheet(month, employee)
     end
 
     private
@@ -47,14 +55,22 @@ module LumberYard
     end
 
     def client_valid?
-      unless client_field_still_na? || client_field_still_invalid?
-        return true
+      if client_field_still_na?
+        return false
+      elsif client_field_still_invalid?
+        return false
+      elsif project_not_billable?
+        return false
       end
-      false
+      true
     end
 
     def client_field_still_na?
       model_citizen.value_included?('billable', 'Billable', project_type) && client == "NA"
+    end
+
+    def project_not_billable?
+      !model_citizen.value_included?('billable', 'Billable', project_type) && client != ""
     end
 
     def client_field_still_invalid?
@@ -65,12 +81,20 @@ module LumberYard
       model_citizen.valid_date?(date)
     end
 
-    def get_this_month
-      model_citizen.get_this_month
+    def find_employee_timesheet(month, employee)
+      Timesheet.find_all{|entry| y, m, d = split_date(entry.date)
+        m == month && entry.username == employee
+      }
     end
 
-    def get_timesheet_from_database
-      Timesheet.all(:date => get_this_month)
+    def find_timesheet(month)
+      Timesheet.find_all{|entry| y, m, d = split_date(entry.date)
+        m == month
+      }
+    end
+
+    def split_date(date)
+       date.split '/'
     end
   end
 end

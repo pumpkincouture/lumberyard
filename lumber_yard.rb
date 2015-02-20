@@ -1,10 +1,15 @@
 require 'sinatra'
+require 'rack-flash'
+require 'sinatra/redirect_with_flash'
 
 require_relative 'lib/client.rb'
 require_relative 'lib/employee.rb'
 require_relative 'lib/timesheet.rb'
 
 include LumberYard
+
+enable :sessions
+use Rack::Flash
 
 DataMapper.setup(:default, ENV["DATABASE_URL"] || "sqlite3://#{Dir.pwd}/time_logger.db")
 
@@ -17,100 +22,98 @@ DataMapper.auto_upgrade!
 
 get '/' do
   @title = "LumberYard"
-  @message = "Please enter your username to get started"
   erb :home
 end
 
+get '/report' do
+  @options = ModelCitizen::Messages.new
+  @time_sheet = LumberYard::Timesheet.new.current_month_employee_timesheet(LumberYard::Timesheet.new.current_month, session[:employee_username])
+  erb :'report/show'
+end
+
+get '/reports/all_employees' do
+  @options = ModelCitizen::Messages.new
+  @time_sheet = LumberYard::Timesheet.new.current_month_timesheet(LumberYard::Timesheet.new.current_month)
+  erb :'all_employee_report/show'
+end
+
 get '/timesheets/new' do
-  @clients = LumberYard::Client.new.get_all_clients
+  @clients = LumberYard::Client.new.find_clients
   erb :'timesheets/new'
 end
 
-get '/report/new' do
-  @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet
-  erb :'report/new'
-end
-
-get '/all_employee_report/new' do
-  @options = ModelCitizen::Messages.new
-  @time_sheet = LumberYard::Timesheet.new.get_timesheet
-  erb :'all_employee_report/new'
-end
-
-get '/client/new' do
+get '/clients/new' do
   erb :'client/new'
 end
 
-get '/employee/new' do
+get '/employees/new' do
   erb :'employee/new'
 end
 
-post '/username/validate' do
+get '/login' do
+  erb :index
+end
+
+post '/username' do
   if !LumberYard::Employee.new.employee_exists?(params["username_name"])
-    @message = ModelCitizen::Messages.new.get_message(:invalid_username)
+    flash[:username_error] = ModelCitizen::Messages.new.get_message(:invalid_username)
     erb :home
   else
-    @message = "Please select what you'd like to do"
-    @employee = LumberYard::Employee.new.get_employee(params["username_name"])
-    erb :index
+    employee = LumberYard::Employee.new.find_employee(params["username_name"])
+    set_session_data(employee)
+    redirect '/login'
   end
 end
 
-post '/timesheets/create' do
-  @clients = LumberYard::Client.new.get_all_clients
+post '/timesheets' do
+  @clients = LumberYard::Client.new.find_clients
+
   if !LumberYard::Timesheet.new.create_timesheet({
-    username: params[:username],
+    username: session[:employee_username],
     date: params[:date],
     hours: params[:hours],
     project_type: params[:project_type],
     client: params[:client]
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
-    erb :'timesheets/form'
+    flash[:timesheet_error] = ModelCitizen::Messages.new.get_message(:invalid_timesheet)
+    redirect '/timesheets/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:timesheet_success)
-    erb :'timesheets/form'
+    flash[:timesheet_success] = ModelCitizen::Messages.new.get_message(:timesheet_success)
+    redirect '/login'
   end
 end
 
-post '/employees/create' do
-  @clients = LumberYard::Client.new.get_all_clients
+post '/employees' do
+  @clients = LumberYard::Client.new.find_clients
   if !LumberYard::Employee.new.create_employee({
     first_name: params[:first_name],
     last_name: params[:last_name],
     username: params[:username],
     employee_type: params[:employee_type],
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_employee)
-    erb :'employee/form'
+    flash[:employee_error] = ModelCitizen::Messages.new.get_message(:invalid_employee)
+    redirect '/employees/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:employee_success)
-    erb :'employee/form'
+    flash[:employee_success] = ModelCitizen::Messages.new.get_message(:employee_success)
+    redirect '/login'
   end
 end
 
-post '/clients/create' do
+post '/clients' do
   if !LumberYard::Client.new.create_client({
     name: params[:name],
     type: params[:type]
     }).valid?
-    @options = ModelCitizen::Messages.new
-    @success = false
-    @message = ModelCitizen::Messages.new.get_message(:invalid_client)
-    erb :'client/form'
+    flash[:client_error] = ModelCitizen::Messages.new.get_message(:invalid_client)
+    redirect '/clients/new'
   else
-    @options = ModelCitizen::Messages.new
-    @success = true
-    @message = ModelCitizen::Messages.new.get_message(:client_success)
-    erb :'client/form'
+    flash[:client_success] = ModelCitizen::Messages.new.get_message(:client_success)
+    redirect '/login'
   end
+end
+
+def set_session_data(employee)
+  session[:employee_first_name] = employee.first_name
+  session[:employee_username] = employee.username
+  session[:employee_type] = employee.employee_type
 end

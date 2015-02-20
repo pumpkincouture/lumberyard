@@ -1,11 +1,12 @@
 <section id="add">
-<% if !@success %>
-<h2 class = "username_prompt"><%= @message %></h2>
-<% else %>
-<h2 class = "username_prompt"><%= @message %></h2>
-<% end %>
-<form action="/username/validate" method="post">
+<h2 class="username_prompt">Please enter a valid username to get started</h2>
+<form action="/username" method="post">
   <input type="textbox" name="username_name"></br>
   <input type="submit" class="submit-button">
+  </br>
+  </br>
+  <% if flash[:username_error] %>
+    <h2 class="error"><%= flash[:username_error] %></h2>
+  <% end %>
 </form>
 </section>

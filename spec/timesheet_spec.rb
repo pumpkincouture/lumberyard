@@ -96,6 +96,17 @@ describe Timesheet do
       expect(timesheet.valid?).to eq(true)
     end
 
+    it "Billable type can only have valid client" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "Billable",
+        :client => "United"
+        )
+      expect(timesheet.valid?).to eq(true)
+    end
+
     it "billable type with empty client is not valid" do
       timesheet = Timesheet.create(
         :username => "solak",
@@ -118,14 +129,48 @@ describe Timesheet do
       expect(timesheet.valid?).to eq(false)
     end
 
-    it "if billable type with no client, is invalid" do
+    it "pto project with empty client is valid" do
       timesheet = Timesheet.create(
         :username => "solak",
         :date => "2015/1/13",
         :hours => "6",
-        :project_type => "billable"
+        :project_type => "pto",
+        :client => ""
         )
-         expect(timesheet.valid?).to eq(false)
+      expect(timesheet.valid?).to eq(true)
+     end
+
+    it "pto project with client is invalid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "pto",
+        :client => "Kraft"
+        )
+      expect(timesheet.valid?).to eq(false)
+     end
+
+    it "non-billable project with empty client is valid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "non-billable",
+        :client => ""
+        )
+      expect(timesheet.valid?).to eq(true)
+     end
+
+    it "non-billable project with client is invalid" do
+      timesheet = Timesheet.create(
+        :username => "solak",
+        :date => "2015/1/13",
+        :hours => "6",
+        :project_type => "non-billable",
+        :client => "Sunkist"
+        )
+      expect(timesheet.valid?).to eq(false)
      end
 
     it "missing a project type is not valid" do
@@ -185,9 +230,57 @@ describe Timesheet do
   end
 
   context "finding timesheets in the database" do
-    it "finds all the timesheets in the database" do
+    it "finds a timesheet for the month of February for username egold" do
       @timesheet = Timesheet.new
-      expect(@timesheet.get_timesheet.count).to eq(0)
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/3",
+        :hours => "5",
+        :project_type => "non-billable",
+        :client => ""
+      )
+
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/1/3",
+        :hours => "8",
+        :project_type => "pto",
+        :client => ""
+      )
+      expect(@timesheet.current_month_employee_timesheet("2", "egold")[0].date).to eq("2015/2/3")
+    end
+
+
+    it "finds all timesheets for month of February" do
+      @timesheet = Timesheet.new
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/3",
+        :hours => "8",
+        :project_type => "pto",
+        :client => ""
+      )
+
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/2/10",
+        :hours => "2",
+        :project_type => "non-billable",
+        :client => ""
+      )
+      expect(@timesheet.current_month_timesheet("2")[0].date).to eq("2015/2/3")
+    end
+
+    it "finds no timesheets for the month of February" do
+      @timesheet = Timesheet.new
+      Timesheet.create(
+        :username => "egold",
+        :date => "2015/3/10",
+        :hours => "2",
+        :project_type => "non-billable",
+        :client => ""
+      )
+      expect(@timesheet.current_month_timesheet("2")[0]).to eq(nil)
     end
   end
 end

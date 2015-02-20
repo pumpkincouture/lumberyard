@@ -55,8 +55,8 @@ describe Client do
       @client = Client.new
       Client.create(:name => "Praxair", :type => "Standard")
 
-      expect(@client.get_all_clients.first.name).to eq("Praxair")
-      expect(@client.get_all_clients.count).to eq(1)
+      expect(@client.find_clients.first.name).to eq("Praxair")
+      expect(@client.find_clients.count).to eq(1)
     end
   end
 end

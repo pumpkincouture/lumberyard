@@ -107,7 +107,7 @@ describe Employee do
     it "returns the Employee object if found" do
       @employee = Employee.new
       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
-      expect(@employee.get_employee('dsmith').first_name).to eq('David')
+      expect(@employee.find_employee('dsmith').first_name).to eq('David')
     end
   end
 end
