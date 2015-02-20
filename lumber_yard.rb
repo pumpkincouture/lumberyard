@@ -61,7 +61,7 @@ post '/username/validate' do
   else
     employee = LumberYard::Employee.new.get_employee(params["username_name"])
     set_session_data(employee)
-    erb :index
+    redirect '/home/index'
   end
 end
 

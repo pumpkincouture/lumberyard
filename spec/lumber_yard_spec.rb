@@ -39,13 +39,13 @@ describe 'LumberYard App' do
     it "display admin page if employee is type admin" do
       Employee.create(:first_name => "David", :last_name => "Smith", :username => "dsmith", :employee_type => "admin")
       post '/username/validate', {"username_name" => 'dsmith'}
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
 
     it "displays non admin page if employee is not admin" do
       Employee.create(:first_name => "Eli", :last_name => "Gold", :username => "egold", :employee_type => "non-admin")
       post '/username/validate', {"username_name" => 'egold'}
-      expect(last_response.status).to eq(200)
+      expect(last_response.status).to eq(302)
     end
   end
 
